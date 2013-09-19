@@ -1,0 +1,37 @@
+- Input files can be provided to the CLI, programmatic or configured
+- Chains setup separately and recordeable as variables
+- Ability to configure each step, record configured instances as vars
+- Reuse grunt tasks (wrapped?), dynamically providing config
+- Apply once, or listen for file changes
+
+. How to only run affected tests when a source file changes?
+. Prod vs dev (non-min or sourcemaps, etc) pipelines
+
+
+icons/*.png
+  => glue  [out: images, .less file]
+
+
+js/**/*.js
+  => jshint  [out: files + verdict]
+  => min  [out: files + sourcemaps]
+     concat  [out: file + sourcemap?]
+     hash [out: file + filename]
+     $assets
+
+js/app.js
+  => rjs  [out: file]
+     hash [out: file + filename]
+     $assets
+
+
+components/foo/foo.min.js
+  => $assets
+components/bar/bar.js
+  => min
+     $assets
+
+$assets
+  => write-to "assets/"
+
+
