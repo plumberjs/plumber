@@ -3,6 +3,7 @@
 - Ability to configure each step, record configured instances as vars
 - Reuse grunt tasks (wrapped?), dynamically providing config
 - Apply once, or listen for file changes
+- Type of input/output? (javascript, coffeescript, sourcemap, image, json, etc)
 
 . How to only run affected tests when a source file changes?
 . Prod vs dev (non-min or sourcemaps, etc) pipelines
