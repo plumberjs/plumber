@@ -119,8 +119,8 @@ luigi.define('less', function(resources) {
 
 var fs = require('fs');
 var q = require('q');
+var flatten = require('flatten');
 
-var glob = q.denodeify(require('glob'));
 var writeFile = q.denodeify(fs.writeFile);
 var readFile = q.denodeify(fs.readFile);
 var unlink = q.denodeify(fs.unlink);
@@ -210,11 +210,18 @@ function resolvePipeline(spec) {
 }
 
 
+function glob(patterns) {
+    var glob = q.denodeify(require('glob'));
+    return q.all(patterns.map(function(patterns) {
+        return glob(patterns);
+    })).then(flatten);
+}
+
 function send(files, pipeline) {
+    var patterns = (files instanceof Array) ? files : [files];
     var operations = resolvePipeline(pipeline);
 
-    // TODO: parallelize? flatten files if array? at what stage?
-    return glob(files).then(function(filenames) {
+    return glob(patterns).then(function(filenames) {
         var resources = filenames.map(filenameToResource);
         return operations.reduce(function(res, op) {
             return res.then(op);
@@ -269,7 +276,7 @@ send('examples/some.js', []).then(function(resources) {
 });
 
 // Pass all JS files through pipeline
-send('examples/amd.js', ['requirejs']).then(function(resources) {
+send(['examples/amd.js'], ['requirejs']).then(function(resources) {
     to(resources, 'out/amd.js').then(function(dests) {
         dests.forEach(function(dest) {
             console.log("written to", dest.path());
@@ -284,9 +291,6 @@ send('examples/*.less', ['less']).then(function(resources) {
         });
     });
 }, function(err) { console.log(err) });
-
-// TODO: Can use multiple file matchers
-// send(['some.js'], ['uglify', 'concat']);
 
 
 // TODO: allow outputing to dir, regardless of number of resources
