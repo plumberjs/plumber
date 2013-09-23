@@ -26,7 +26,6 @@ var luigi = {
 
 // TODO: try implement:
 //   - hash
-//   - less
 //   - glue (or similar)
 //   - karma
 
@@ -100,6 +99,19 @@ luigi.define('requirejs', function(resources) {
             });
         }
     }
+});
+
+
+luigi.define('less', function(resources) {
+    var less = require('less');
+    var render = q.denodeify(less.render);
+
+    return q.all(resources.map(function(resource) {
+        // TODO: extra options (filename, paths, etc)?
+        return render(resource.data()).then(function(cssData) {
+            return resource.derive({data: cssData});
+        });
+    }));
 });
 
 
@@ -264,6 +276,14 @@ send('examples/amd.js', ['requirejs']).then(function(resources) {
         });
     });
 });
+
+send('examples/*.less', ['less']).then(function(resources) {
+    to(resources, 'out/more.css').then(function(dests) {
+        dests.forEach(function(dest) {
+            console.log("written to", dest.path());
+        });
+    });
+}, function(err) { console.log(err) });
 
 // TODO: Can use multiple file matchers
 // send(['some.js'], ['uglify', 'concat']);
