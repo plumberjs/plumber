@@ -90,7 +90,7 @@ luigi.define('requirejs', function(resources) {
 
             return optimize(options).then(function() {
                 // FIXME: don't hardcode encoding?
-                return readFile(tmpFile, {encoding: 'utf-8'});
+                return readFile(tmpFile, 'utf-8');
             }).then(function(compiledData) {
                 // Cleanup temporary file
                 unlink(tmpFile);
@@ -137,9 +137,9 @@ Resource.prototype.data = function() {
     // If no data cached, read from file
     if (! this._data) {
         // FIXME: if no path?
-        // FIXME: encoding?
+        // FIXME: don't hardcode encoding?
         // FIXME: avoid sync?
-        this._data = fs.readFileSync(this.path());
+        this._data = fs.readFileSync(this.path(), 'utf-8');
     }
     return this._data;
 };
