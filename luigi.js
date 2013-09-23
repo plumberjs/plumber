@@ -24,14 +24,19 @@ var luigi = {
 
 
 // TODO:
+//   * Implement hash task, also output asset mapping
+//   * Error if trying to write multiple files to single file
+//   * Output sourcemap as extra resource
 //   * Reuse Resource for Destination?
-//   * Support directory Destination (Resource?), errors if mismatch
-//   * Track Resource filename, inherit by default, can override via dest
-//   * Operations can alter filename, e.g. append .min
+//   * Represent resource type, check as input, provide as output
+//   * Allow specifying multiple destinations by type
+//   * Use Harmony modules and other patterns (let, etc)?
+//   * Break down files, add tests
 
 // TODO: try implement:
 //   - hash
 //   - glue (or similar)
+//   - jshint
 //   - karma
 
 // TODO: usage:
