@@ -23,6 +23,11 @@ var luigi = {
 };
 
 
+// TODO:
+//   * Reuse Resource for Destination?
+//   * Support directory Destination (Resource?), errors if mismatch
+//   * Track Resource filename, inherit by default, can override via dest
+//   * Operations can alter filename, e.g. append .min
 
 // TODO: try implement:
 //   - hash
@@ -107,7 +112,7 @@ luigi.define('less', function(resources) {
     var render = q.denodeify(less.render);
 
     return q.all(resources.map(function(resource) {
-        // TODO: extra options (filename, paths, etc)?
+        // TODO: extra options (filename, paths, yuicompress, etc)?
         return render(resource.data()).then(function(cssData) {
             return resource.derive({data: cssData});
         });
