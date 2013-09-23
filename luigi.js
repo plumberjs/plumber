@@ -56,7 +56,10 @@ luigi.define('uglify', function(resources) {
             // TODO: iff requested? filename, based on output spec? on input filename?
             // TODO: return as resource?
         });
-        return resource.derive({data: result.code});
+        return new Resource({
+            filename: resource.filename().replace('.js', '.min.js'),
+            data: result.code
+        });
     });
 });
 
@@ -105,7 +108,10 @@ luigi.define('requirejs', function(resources) {
                 unlink(tmpFile);
 
                 // and return generated data as a resource
-                return [resource.derive({data: compiledData})];
+                return [new Resource({
+                    filename: resource.path(),
+                    data: compiledData
+                })];
             });
         }
     }
@@ -119,7 +125,10 @@ luigi.define('less', function(resources) {
     return q.all(resources.map(function(resource) {
         // TODO: extra options (filename, paths, yuicompress, etc)?
         return render(resource.data()).then(function(cssData) {
-            return resource.derive({data: cssData});
+            return new Resource({
+                filename: resource.path().replace('.less', '.css'),
+                data: cssData
+            });
         });
     }));
 });
@@ -142,6 +151,12 @@ function Resource(properties) {
     // TODO: record filename, by default map to same filename
     this._path = properties.path;
     this._data = properties.data;
+    this._filename = properties.filename ||
+        (properties.path && extractFilename(properties.path));
+
+    function extractFilename(path) {
+        return path.split('/').slice(-1)[0];
+    }
 }
 
 Resource.prototype.path = function() {
@@ -149,10 +164,7 @@ Resource.prototype.path = function() {
 };
 
 Resource.prototype.filename = function() {
-    if (this._path) {
-        // TODO: return filename from path
-    }
-    // FIXME: else error?
+    return this._filename;
 };
 
 Resource.prototype.data = function() {
@@ -166,16 +178,6 @@ Resource.prototype.data = function() {
     return this._data;
 };
 
-// TODO: copy existing resource, overriding properties
-Resource.prototype.derive = function(properties) {
-    properties = properties || {};
-    return new Resource({
-        // need to allow for 'null' to override
-        path: properties.hasOwnProperty('path') ? properties.path : this.path,
-        data: properties.hasOwnProperty('data') ? properties.data : this.data
-    });
-};
-
 function filenameToResource(path) {
     return new Resource({path: path});
 }
@@ -183,12 +185,10 @@ function filenameToResource(path) {
 
 
 
-function Destination(path, forceDirectory) {
-    this._path = path;
-    if (forceDirectory || path.slice(-1) === '/') {
-        this._isDirectory = true;
-    }
-    // TODO: check if file exists and correct type
+function Destination(properties) {
+    properties = properties || {};
+    this._path = properties.path;
+    this._isDirectory = properties.isDirectory;
 }
 
 Destination.prototype.path = function() {
@@ -199,16 +199,42 @@ Destination.prototype.isDirectory = function() {
     return this._isDirectory;
 };
 
+// TODO: copy existing destination, overriding properties
+Destination.prototype.withFilename = function(filename) {
+    return new Destination({
+        path: [this.path(), filename].join('/'),
+        isDirectory: this.isDirectory()
+    });
+};
 
-function filenameToDestination(path, forceDirectory) {
-    if (! (path instanceof Destination)) {
+
+function looksLikeDirectory(path) {
+    // FIXME: terrible heuristic
+    return path.slice(-1) === '/' || ! /\.(js|css|less)$/.test(path);
+}
+
+function filenameToDestination(path) {
+    if (path instanceof Destination) {
+        return path;
+    } else {
         if (typeof path !== 'string') {
             throw new Error('destination path is not a string: ' + path);
         }
 
-        return new Destination(path, forceDirectory);
-    } else {
-        return path;
+        // TODO: use async API
+        var isDirectory;
+        if (fs.existsSync(path)) {
+            var stats = fs.statSync(path);
+            isDirectory = stats.isDirectory();
+        } else {
+            isDirectory = looksLikeDirectory(path);
+        }
+        // FIXME: strip trailing / if any
+
+        return new Destination({
+            path: path,
+            isDirectory: isDirectory
+        });
     }
 }
 
@@ -240,29 +266,25 @@ function send(files, pipeline) {
 }
 
 function to(resources, destPath) {
-    var multipleResources = resources.length > 1;
-    // TODO: if multipleResources, assume dir
+    var dest = filenameToDestination(destPath);
 
-    var dest = filenameToDestination(destPath, multipleResources);
-    if (dest.isDirectory()) {
-        var directory = dest.path();
-        return q.all(resources.map(function(resource) {
-            // FIXME: .filename() missing! must pass filename through ops
-            return writeFile(directory + resource.filename(), resource.data()).then(function() {
-                // TODO: return corresponding dest
-            });
-        }));
-    } else {
-        if (resources.length > 1) {
-            throw new Error('cannot output multiple resources to a single file');
+    // Trying to output multiple resources into a single file? That won't do
+    if (resources.length > 1 && ! dest.isDirectory()) {
+        throw new Error('Cannot write multiple resources to a single file!');
+    }
+
+    return q.all(resources.map(function(resource) {
+        var destFile;
+        if (dest.isDirectory()) {
+            destFile = dest.withFilename(resource.filename());
+        } else {
+            destFile = dest;
         }
 
-        return q.all(resources.map(function(resource) {
-            return writeFile(dest.path(), resource.data()).then(function() {
-                return dest;
-            });
-        }));
-    }
+        return writeFile(destFile.path(), resource.data()).then(function() {
+            return destFile;
+        });
+    }));
 }
 
 
@@ -284,8 +306,16 @@ function test(files, pipeline, dest) {
 // Pass all JS files through pipeline
 test('examples/*.js', ['uglify', 'concat'], 'out/out.js');
 
+// Minify all files and write to out directory
+test('examples/*.js', ['uglify'], 'out');
+
+// Minify all files and try to write to single file -- FAILS!
+// FIXME: doesn't fail?
+test('examples/*.js', ['uglify'], 'out/singlefile.js');
+
 // Copying is just an empty pipeline to a new file
 test('examples/some.js', [], 'out/some.copy.js');
+test('examples/some.js', [], 'out');
 
 // Pass all JS files through pipeline
 test(['examples/amd.js'], ['requirejs'], 'out/amd.js');
