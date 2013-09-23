@@ -1,0 +1,36 @@
+{
+  "name": "luigi",
+  "version": "0.1.0",
+  "description": "a tool for managing web asset pipelines",
+  "main": "luigi.js",
+  "directories": {
+    "example": "examples"
+  },
+  "dependencies": {
+    "less": "~1.4.2"
+  },
+  "devDependencies": {
+    "q": "~0.9.7",
+    "requirejs": "~2.1.8",
+    "glob": "~3.2.6",
+    "uglify-js": "~2.4.0",
+    "less": "~1.4.2"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/theefer/luigi.git"
+  },
+  "keywords": [
+    "build",
+    "assets",
+    "pipeline"
+  ],
+  "author": "Sébastien Cevey <seb@cine7.net>",
+  "license": "GPL",
+  "bugs": {
+    "url": "https://github.com/theefer/luigi/issues"
+  }
+}
