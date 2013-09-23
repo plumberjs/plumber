@@ -261,41 +261,32 @@ function to(resources, destPath) {
 }
 
 
-// Pass all JS files through pipeline
-send('examples/*.js', ['uglify', 'concat']).then(function(resources) {
-    // console.log("OUTPUT", resources)
-    to(resources, 'out/out.js').then(function(dests) {
-        dests.forEach(function(dest) {
-            console.log("written to", dest.path());
+
+// == Test luigi with some examples ==
+
+function test(files, pipeline, dest) {
+    send(files, pipeline).then(function(resources) {
+        to(resources, dest).then(function(dests) {
+            dests.forEach(function(dest) {
+                console.log("written to", dest.path());
+            });
         });
+    }, function(err) {
+        console.log("Test failed: ", err);
     });
-});
+}
+
+// Pass all JS files through pipeline
+test('examples/*.js', ['uglify', 'concat'], 'out/out.js');
 
 // Copying is just an empty pipeline to a new file
-send('examples/some.js', []).then(function(resources) {
-    to(resources, 'out/some.copy.js').then(function(dests) {
-        dests.forEach(function(dest) {
-            console.log("written to", dest.path());
-        });
-    });
-});
+test('examples/some.js', [], 'out/some.copy.js');
 
 // Pass all JS files through pipeline
-send(['examples/amd.js'], ['requirejs']).then(function(resources) {
-    to(resources, 'out/amd.js').then(function(dests) {
-        dests.forEach(function(dest) {
-            console.log("written to", dest.path());
-        });
-    });
-});
+test(['examples/amd.js'], ['requirejs'], 'out/amd.js');
 
-send('examples/*.less', ['less']).then(function(resources) {
-    to(resources, 'out/more.css').then(function(dests) {
-        dests.forEach(function(dest) {
-            console.log("written to", dest.path());
-        });
-    });
-}, function(err) { console.log(err) });
+// Pass LESS files to less
+test('examples/*.less', ['less'], 'out/more.css');
 
 
 // TODO: allow outputing to dir, regardless of number of resources
