@@ -108,10 +108,10 @@ luigi.define('requirejs', function(resources) {
 var fs = require('fs');
 var q = require('q');
 
-var glob = wrapInPromise(require('glob'), 2);
-var writeFile = wrapInPromise(fs.writeFile, 2);
-var readFile = wrapInPromise(fs.readFile, 2);
-var unlink = wrapInPromise(fs.unlink, 1);
+var glob = q.denodeify(require('glob'));
+var writeFile = q.denodeify(fs.writeFile);
+var readFile = q.denodeify(fs.readFile);
+var unlink = q.denodeify(fs.unlink);
 
 
 function Resource(properties) {
@@ -197,30 +197,6 @@ function resolvePipeline(spec) {
     });
 }
 
-
-// FIXME: or use q.nbind() ?
-function wrapInPromise(func, numArgs) {
-
-    return function(/* arguments... */) {
-        var defer = q.defer();
-
-        function handler(err, result) {
-            if (err) {
-                defer.reject(err);
-            } else {
-                defer.resolve(result);
-            }
-        }
-
-        var args = Array.prototype.slice.apply(arguments);
-        args.length = numArgs;
-        args.push(handler);
-
-        func.apply(null, args);
-
-        return defer.promise;
-    };
-}
 
 function send(files, pipeline) {
     var operations = resolvePipeline(pipeline);
