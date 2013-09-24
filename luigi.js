@@ -46,17 +46,28 @@ luigi.define('uglify', function(resources) {
 
     // TODO: typed? var javascripts = resources.filter('javascript');
 
-    return resources.map(function(resource) {
+    return flatten(resources.map(function(resource) {
+        // TODO: filename, based on output spec? on input filename?
+        var minFilename = resource.filename().replace('.js', '.min.js');
+        var sourceMapFilename = minFilename + '.map';
+
+        var sourceMapData = UglifyJS.SourceMap();
         var result = UglifyJS.minify(resource.path(), {
-            outSourceMap: "out.js.map"
-            // TODO: iff requested? filename, based on output spec? on input filename?
-            // TODO: return as resource?
+            outSourceMap: sourceMapFilename,
+            source_map: sourceMapData
         });
-        return new Resource({
-            filename: resource.filename().replace('.js', '.min.js'),
+
+        var uglyFile = new Resource({
+            filename: minFilename,
             data: result.code
         });
-    });
+
+        var sourceMap = new Resource({
+            filename: sourceMapFilename,
+            data: sourceMapData.toString()
+        });
+        return [uglyFile, sourceMap];
+    }));
 });
 
 
