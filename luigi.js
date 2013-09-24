@@ -297,7 +297,7 @@ function to(resources, destPath) {
 
     // Trying to output multiple resources into a single file? That won't do
     if (resources.length > 1 && ! dest.isDirectory()) {
-        throw new Error('Cannot write multiple resources to a single file!');
+        return q.reject(new Error('Cannot write multiple resources to a single file: ' + dest.path()));
     }
 
     return q.all(resources.map(function(resource) {
@@ -320,13 +320,16 @@ function to(resources, destPath) {
 
 function test(files, pipeline, dest) {
     send(files, pipeline).then(function(resources) {
-        to(resources, dest).then(function(dests) {
+        return to(resources, dest).then(function(dests) {
             dests.forEach(function(dest) {
                 console.log("written to", dest.path());
             });
+        }, function(err) {
+            // FIXME: why not caught by parent errback?
+            console.log("Writing failed: ", err);
         });
     }, function(err) {
-        console.log("Test failed: ", err);
+        console.log("Sending failed: ", err);
     });
 }
 
@@ -337,7 +340,6 @@ test('examples/*.js', ['uglify', 'concat'], 'out/out.js');
 test('examples/*.js', ['uglify'], 'out');
 
 // Minify all files and try to write to single file -- FAILS!
-// FIXME: doesn't fail?
 test('examples/*.js', ['uglify'], 'out/singlefile.js');
 
 // Copying is just an empty pipeline to a new file
