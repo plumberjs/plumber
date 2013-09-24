@@ -24,17 +24,13 @@ var luigi = {
 
 
 // TODO:
-//   * Implement hash task, also output asset mapping
-//   * Error if trying to write multiple files to single file
-//   * Output sourcemap as extra resource
 //   * Reuse Resource for Destination?
-//   * Represent resource type, check as input, provide as output
-//   * Allow specifying multiple destinations by type
 //   * Use Harmony modules and other patterns (let, etc)?
 //   * Break down files, add tests
+//   * Represent resource type, check as input, provide as output
+//   * Allow specifying multiple destinations by type
 
 // TODO: try implement:
-//   - hash
 //   - glue (or similar)
 //   - jshint
 //   - karma
@@ -115,6 +111,37 @@ luigi.define('requirejs', function(resources) {
             });
         }
     }
+});
+
+
+luigi.define('hash', function(resources) {
+    var crypto = require('crypto');
+
+    function hash(data) {
+        var md5sum = crypto.createHash('md5');
+        md5sum.update(data, 'utf-8');
+
+        var d = md5sum.digest('hex');
+        return d.substr(0, 8);
+    }
+
+    var mapping = {};
+    var hashedResources = resources.map(function(resource) {
+        var hashKey = hash(resource.data());
+        var hashedResource = new Resource({
+            filename: resource.filename().replace(/(\.[^.]+)$/, ['.', hashKey, '$1'].join('')),
+            data:     resource.data()
+        });
+        mapping[resource.filename()] = hashedResource.filename();
+        return hashedResource;
+    });
+
+    var mappingResource = new Resource({
+        filename: 'assets-mapping.json',
+        data:     JSON.stringify(mapping)
+    });
+
+    return hashedResources.concat(mappingResource);
 });
 
 
@@ -319,6 +346,9 @@ test('examples/some.js', [], 'out');
 
 // Pass all JS files through pipeline
 test(['examples/amd.js'], ['requirejs'], 'out/amd.js');
+
+// Hash all files and write renamed version and mapping
+test('examples/*.js', ['hash'], 'out');
 
 // Pass LESS files to less
 test('examples/*.less', ['less'], 'out/more.css');
