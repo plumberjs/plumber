@@ -319,9 +319,7 @@ function to(resources, dest) {
             destFile = destPath;
         }
 
-        return writeFile(destFile.path(), resource.data()).then(function() {
-            return destFile;
-        });
+        return writeFile(destFile.path(), resource.data()).thenResolve(destFile);
     }));
 }
 
