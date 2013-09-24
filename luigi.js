@@ -15,20 +15,16 @@ var luigi = {
         return operation;
     },
 
-    // dir: function(path) {
-    //     return new Destination(path, true);
-    // },
-
     __operations: {}
 };
 
 
 // TODO:
-//   * Reuse Resource for Destination?
-//   * Use Harmony modules and other patterns (let, etc)?
+//   * Reuse Path in Resource
 //   * Break down files, add tests
 //   * Represent resource type, check as input, provide as output
 //   * Allow specifying multiple destinations by type
+//   * Use Harmony modules and other patterns (let, etc)?
 
 // TODO: try implement:
 //   - glue (or similar)
@@ -183,6 +179,65 @@ var readFile = q.denodeify(fs.readFile);
 var unlink = q.denodeify(fs.unlink);
 
 
+function Path(properties) {
+    this._dirname = properties.dirname;
+    if (properties.filename) {
+        // normalize '' to undefined
+        this._filename = properties.filename;
+    }
+}
+
+Path.prototype.dirname = function() {
+    return this._dirname;
+}
+
+Path.prototype.filename = function() {
+    return this._filename;
+}
+
+Path.prototype.path = function() {
+    return [this.dirname(), this._filename].filter(function(x){ return x; }).join('/');
+}
+
+Path.prototype.isDirectory = function() {
+    return ! this._filename;
+}
+
+Path.prototype.withFilename = function(filename) {
+    return new Path({dirname: this.dirname(), filename: filename});
+}
+
+
+function stringToPath(path) {
+    var segments = path.split('/');
+    // FIXME: check if last segment looks like filename, or if trailing /, or check on disk?
+//     if (typeof this._isDirectory === 'undefined') {
+//         // TODO: use async API
+//         var path = this.path();
+//         if (fs.existsSync(path)) {
+//             var stats = fs.statSync(path);
+//             this._isDirectory = stats.isDirectory();
+//         } else {
+//             // FIXME: terrible heuristic
+//             this._isDirectory = path.indexOf('.') === -1;
+//         }
+//     }
+
+
+    if (segments.slice(-1)[0].indexOf('.') === -1) {
+        return new Path({
+            dirname:  segments.join('/')
+        });
+    } else {
+        return new Path({
+            dirname:  segments.slice(0, -1).join('/'),
+            filename: segments.slice(-1)[0]
+        });
+    }
+}
+
+
+
 function Resource(properties) {
     properties = properties || {};
 
@@ -221,61 +276,6 @@ function filenameToResource(path) {
 }
 
 
-
-
-function Destination(properties) {
-    properties = properties || {};
-    this._path = properties.path;
-    this._isDirectory = properties.isDirectory;
-}
-
-Destination.prototype.path = function() {
-    return this._path;
-};
-
-Destination.prototype.isDirectory = function() {
-    return this._isDirectory;
-};
-
-// TODO: copy existing destination, overriding properties
-Destination.prototype.withFilename = function(filename) {
-    return new Destination({
-        path: [this.path(), filename].join('/'),
-        isDirectory: this.isDirectory()
-    });
-};
-
-
-function looksLikeDirectory(path) {
-    // FIXME: terrible heuristic
-    return path.slice(-1) === '/' || ! /\.(js|css|less)$/.test(path);
-}
-
-function filenameToDestination(path) {
-    if (path instanceof Destination) {
-        return path;
-    } else {
-        if (typeof path !== 'string') {
-            throw new Error('destination path is not a string: ' + path);
-        }
-
-        // TODO: use async API
-        var isDirectory;
-        if (fs.existsSync(path)) {
-            var stats = fs.statSync(path);
-            isDirectory = stats.isDirectory();
-        } else {
-            isDirectory = looksLikeDirectory(path);
-        }
-        // FIXME: strip trailing / if any
-
-        return new Destination({
-            path: path,
-            isDirectory: isDirectory
-        });
-    }
-}
-
 function resolvePipeline(spec) {
     return spec.map(function(opName) {
         // TODO: also accept resolved, possibly configured, operation objects
@@ -303,20 +303,20 @@ function send(files, pipeline) {
     });
 }
 
-function to(resources, destPath) {
-    var dest = filenameToDestination(destPath);
+function to(resources, dest) {
+    var destPath = stringToPath(dest);
 
     // Trying to output multiple resources into a single file? That won't do
-    if (resources.length > 1 && ! dest.isDirectory()) {
+    if (resources.length > 1 && ! destPath.isDirectory()) {
         return q.reject(new Error('Cannot write multiple resources to a single file: ' + dest.path()));
     }
 
     return q.all(resources.map(function(resource) {
         var destFile;
-        if (dest.isDirectory()) {
-            destFile = dest.withFilename(resource.filename());
+        if (destPath.isDirectory()) {
+            destFile = destPath.withFilename(resource.filename());
         } else {
-            destFile = dest;
+            destFile = destPath;
         }
 
         return writeFile(destFile.path(), resource.data()).then(function() {
@@ -343,6 +343,7 @@ function test(files, pipeline, dest) {
         console.log("Sending failed: ", err);
     });
 }
+
 
 // Pass all JS files through pipeline
 test('examples/*.js', ['uglify', 'concat'], 'out/out.js');
