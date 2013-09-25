@@ -366,6 +366,65 @@ test('examples/*.js', ['hash'], 'out');
 test('examples/*.less', ['less'], 'out/more.css');
 
 
+
+
+function Pipeline() {}
+
+// Pipeline.prototype.as = function(name) {
+//     this._name = name;
+// };
+
+Pipeline.prototype.find = function(files) {
+    this._files = files;
+    return this;
+};
+
+Pipeline.prototype.run = function(operations) {
+    this._operations = operations;
+    return this;
+};
+
+Pipeline.prototype.write = function(dest) {
+    this._dest = dest;
+    return this;
+};
+
+Pipeline.prototype.execute = function(dest) {
+    send(this._files, this._operations).then(function(resources) {
+        return to(resources, this._dest).then(function(dests) {
+            dests.forEach(function(dest) {
+                console.log("written to", dest.path());
+            });
+        }, function(err) {
+            // FIXME: why not caught by parent errback?
+            console.log("Writing failed: ", err);
+        });
+    }, function(err) {
+        console.log("Sending failed: ", err);
+    });
+};
+
+
+var pipelines = {};
+
+var LuigiDsl = {
+    as: function(name) {
+        return (pipelines[name] = new Pipeline());
+    }
+};
+
+var spec = require('./Pipeline.js');
+spec(LuigiDsl);
+console.log(pipelines)
+var pipelineArg = process.argv[2];
+var pipeline = pipelines[pipelineArg];
+if (! pipeline) {
+    throw new Error('Pipeline not defined: ' + pipelineArg);
+}
+
+pipeline.execute();
+
+
 // TODO: allow outputing to dir, regardless of number of resources
 // to(resources, 'dist/');
 // to(resources, 'dist'); // exists as a dir
