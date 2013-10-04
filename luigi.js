@@ -20,7 +20,6 @@ var luigi = {
 
 
 // TODO:
-//   * Reuse Path in Resource
 //   * Break down files, add tests
 //   * Represent resource type, check as input, provide as output
 //   * Allow specifying multiple destinations by type
@@ -48,7 +47,7 @@ luigi.define('uglify', function(resources) {
         var sourceMapFilename = minFilename + '.map';
 
         var sourceMapData = UglifyJS.SourceMap();
-        var result = UglifyJS.minify(resource.path(), {
+        var result = UglifyJS.minify(resource.path().absolute(), {
             outSourceMap: sourceMapFilename,
             source_map: sourceMapData
         });
@@ -97,9 +96,13 @@ luigi.define('requirejs', function(resources) {
         if (false && resource.isDirectory()) {
             // TODO: optimize whole directory
         } else {
-            var pathNoExt = resource.path().replace(/\.js$/, '');
+            var pathNoExt = resource.path().filename().replace(/\.js$/, '');
             var tmpFile = 'rjsout.js'; // TODO: generate filename in tmp folder
+
             var options = {
+                // TODO: do we always want to use baseUrl?
+                // FIXME: or as luigi scope?
+                baseUrl: resource.path().dirname(),
                 name: pathNoExt,
                 out: tmpFile
             };
@@ -161,7 +164,7 @@ luigi.define('less', function(resources) {
         // TODO: extra options (filename, paths, yuicompress, etc)?
         return render(resource.data()).then(function(cssData) {
             return new Resource({
-                filename: resource.path().replace('.less', '.css'),
+                filename: resource.path().filename().replace('.less', '.css'),
                 data: cssData
             });
         });
@@ -178,6 +181,8 @@ var flatten = require('flatten');
 var writeFile = q.denodeify(fs.writeFile);
 var readFile = q.denodeify(fs.readFile);
 var unlink = q.denodeify(fs.unlink);
+
+var identity = function(x){ return x; };
 
 
 function Path(properties) {
@@ -196,8 +201,8 @@ Path.prototype.filename = function() {
     return this._filename;
 }
 
-Path.prototype.path = function() {
-    return [this.dirname(), this._filename].filter(function(x){ return x; }).join('/');
+Path.prototype.absolute = function() {
+    return [this.dirname(), this._filename].filter(identity).join('/');
 }
 
 Path.prototype.isDirectory = function() {
@@ -243,7 +248,7 @@ function Resource(properties) {
     properties = properties || {};
 
     // TODO: record filename, by default map to same filename
-    this._path = properties.path;
+    this._path = properties.path && stringToPath(properties.path);
     this._data = properties.data;
     this._filename = properties.filename ||
         (properties.path && extractFilename(properties.path));
@@ -267,7 +272,7 @@ Resource.prototype.data = function() {
         // FIXME: if no path?
         // FIXME: don't hardcode encoding?
         // FIXME: avoid sync?
-        this._data = fs.readFileSync(this.path(), 'utf-8');
+        this._data = fs.readFileSync(this.path().absolute(), 'utf-8');
     }
     return this._data;
 };
@@ -310,7 +315,7 @@ function to(resources, dest) {
     // Trying to output multiple resources into a single file? That won't do
     if (resources.length > 1 && ! destPath.isDirectory()) {
         // FIXME: error now outputted ?
-        return q.reject(new Error('Cannot write multiple resources to a single file: ' + dest.path()));
+        return q.reject(new Error('Cannot write multiple resources to a single file: ' + dest.path().absolute()));
     }
 
     return q.all(resources.map(function(resource) {
@@ -321,7 +326,7 @@ function to(resources, dest) {
             destFile = destPath;
         }
 
-        return writeFile(destFile.path(), resource.data()).thenResolve(destFile);
+        return writeFile(destFile.absolute(), resource.data()).thenResolve(destFile);
     }));
 }
 
@@ -352,7 +357,7 @@ Pipeline.prototype.execute = function(dest) {
     send(this._files, this._operations).then(function(resources) {
         return to(resources, this._dest).then(function(dests) {
             dests.forEach(function(dest) {
-                console.log("written to", dest.path());
+                console.log("written to", dest.absolute());
             });
         }, function(err) {
             // FIXME: why not caught by parent errback?
