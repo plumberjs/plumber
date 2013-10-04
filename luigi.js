@@ -20,6 +20,7 @@ var luigi = {
 
 
 // TODO:
+//   * Handle RequireJS paths config somehow
 //   * Break down files, add tests
 //   * Represent resource type, check as input, provide as output
 //   * Allow specifying multiple destinations by type
@@ -100,8 +101,8 @@ luigi.define('requirejs', function(resources) {
             var tmpFile = 'rjsout.js'; // TODO: generate filename in tmp folder
 
             var options = {
-                // TODO: do we always want to use baseUrl?
-                // FIXME: or as luigi scope?
+                // FIXME: do we always want to use baseUrl?
+                //        or as explicit luigi scope?
                 baseUrl: resource.path().dirname(),
                 name: pathNoExt,
                 out: tmpFile
