@@ -354,10 +354,10 @@ Pipeline.prototype.execute = function(dest) {
             });
         }, function(err) {
             // FIXME: why not caught by parent errback?
-            console.log("Writing failed: ", err);
+            console.log("Writing failed: ", err.stack);
         });
     }, function(err) {
-        console.log("Sending failed: ", err);
+        console.log("Sending failed: ", err.stack);
     });
 };
 
@@ -370,7 +370,8 @@ var LuigiDsl = {
     }
 };
 
-var spec = require('./Pipeline.js');
+var cwd = process.cwd();
+var spec = require(cwd + '/Pipeline.js');
 spec(LuigiDsl);
 console.log(pipelines)
 var pipelineArg = process.argv[2];
