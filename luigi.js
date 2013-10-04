@@ -62,6 +62,7 @@ luigi.define('uglify', function(resources) {
             filename: sourceMapFilename,
             data: sourceMapData.toString()
         });
+
         return [uglyFile, sourceMap];
     }));
 });
@@ -308,6 +309,7 @@ function to(resources, dest) {
 
     // Trying to output multiple resources into a single file? That won't do
     if (resources.length > 1 && ! destPath.isDirectory()) {
+        // FIXME: error now outputted ?
         return q.reject(new Error('Cannot write multiple resources to a single file: ' + dest.path()));
     }
 
@@ -356,7 +358,7 @@ Pipeline.prototype.execute = function(dest) {
             // FIXME: why not caught by parent errback?
             console.log("Writing failed: ", err.stack);
         });
-    }, function(err) {
+    }.bind(this), function(err) {
         console.log("Sending failed: ", err.stack);
     });
 };
