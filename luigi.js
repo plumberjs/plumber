@@ -374,15 +374,28 @@ var LuigiDsl = {
 
 var cwd = process.cwd();
 var spec = require(cwd + '/Pipeline.js');
-spec(LuigiDsl);
-console.log(pipelines)
-var pipelineArg = process.argv[2];
-var pipeline = pipelines[pipelineArg];
-if (! pipeline) {
-    throw new Error('Pipeline not defined: ' + pipelineArg);
-}
 
-pipeline.execute();
+spec(LuigiDsl);
+
+var pipelineArg = process.argv[2];
+if (pipelineArg) {
+    // Run specified pipeline
+    var pipeline = pipelines[pipelineArg];
+    console.log("Run pipeline: " + pipelineArg);
+    if (! pipeline) {
+        throw new Error('Pipeline not defined: ' + pipelineArg);
+    }
+
+    pipeline.execute();
+
+} else {
+    // Run all pipelines
+    Object.keys(pipelines).forEach(function(pipelineArg) {
+        var pipeline = pipelines[pipelineArg];
+        console.log("Run pipeline: " + pipelineArg);
+        pipeline.execute();
+    });
+}
 
 
 // TODO: allow outputing to dir, regardless of number of resources
@@ -392,10 +405,3 @@ pipeline.execute();
 // to(resources, {javascript: 'app.js', sourcemap: 'app.js.map'});
 
 // TODO: create target directory if missing
-
-// TODO: DSL?
-// luigi.as('compile').send(sources, compile).to(dest)
-
-
-// TRY: js2-refactor
-
