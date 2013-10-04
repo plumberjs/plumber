@@ -325,49 +325,6 @@ function to(resources, dest) {
 
 
 
-// == Test luigi with some examples ==
-
-function test(files, pipeline, dest) {
-    send(files, pipeline).then(function(resources) {
-        return to(resources, dest).then(function(dests) {
-            dests.forEach(function(dest) {
-                console.log("written to", dest.path());
-            });
-        }, function(err) {
-            // FIXME: why not caught by parent errback?
-            console.log("Writing failed: ", err);
-        });
-    }, function(err) {
-        console.log("Sending failed: ", err);
-    });
-}
-
-
-// Pass all JS files through pipeline
-test('examples/*.js', ['uglify', 'concat'], 'out/out.js');
-
-// Minify all files and write to out directory
-test('examples/*.js', ['uglify'], 'out');
-
-// Minify all files and try to write to single file -- FAILS!
-test('examples/*.js', ['uglify'], 'out/singlefile.js');
-
-// Copying is just an empty pipeline to a new file
-test('examples/some.js', [], 'out/some.copy.js');
-test('examples/some.js', [], 'out');
-
-// Pass all JS files through pipeline
-test(['examples/amd.js'], ['requirejs'], 'out/amd.js');
-
-// Hash all files and write renamed version and mapping
-test('examples/*.js', ['hash'], 'out');
-
-// Pass LESS files to less
-test('examples/*.less', ['less'], 'out/more.css');
-
-
-
-
 function Pipeline() {}
 
 // Pipeline.prototype.as = function(name) {
