@@ -1,12 +1,12 @@
-module.exports = function(luigi) {
+var glob = require('./src/operation/glob');
+var uglify = require('./src/operation/uglify')();
+var concat = require('./src/operation/concat')();
+var requirejs = require('./src/operation/requirejs')();
+var hash = require('./src/operation/hash')();
+var less = require('./src/operation/less')();
+var write = require('./src/operation/write');
 
-    var glob = require('./src/operation/glob');
-    var uglify = require('./src/operation/uglify')();
-    var concat = require('./src/operation/concat')();
-    var requirejs = require('./src/operation/requirejs')();
-    var hash = require('./src/operation/hash')();
-    var less = require('./src/operation/less')();
-    var write = require('./src/operation/write');
+module.exports = function(luigi) {
 
     var sources = 'examples/**/*.js';
     var dest = 'out/out.js';

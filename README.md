@@ -15,17 +15,21 @@ The `Pipeline.js` file below describes two tasks:
   them in the `out` directory.
 
 ```
+var glob = require('./src/operation/glob');
+var uglify = require('./src/operation/uglify')();
+var concat = require('./src/operation/concat')();
+var less = require('./src/operation/less')();
+var write = require('./src/operation/write');
+
 module.exports = function(luigi) {
 
-    var sources = 'examples/**/*.js';
-    var compile = ['uglify', 'concat'];
-    var dest = 'out/out.js';
-
     // minify and concatenate all JS files
-    luigi.as('compile').find(sources).run(compile).write(dest);
+    var sources = 'examples/**/*.js';
+    var dest = 'out/out.js';
+    luigi['compile'] = [glob([sources]), uglify, concat, write(dest)];
 
     // compile all LESS files to CSS
-    luigi.as('stylesheets').find('examples/*.less').run(['less']).write('out');
+    luigi['stylesheets'] = [glob(['examples/*.less']), less, write('out')];
 
 };
 ```
