@@ -50,7 +50,7 @@ all of them with `node luigi.js`.
 - Support building assets and running linting/tests in the same way
 
 
-## Rationale
+## Architecture
 
 Most web asset building can be described as a pipeline of operations.
 Each operation takes one or more files as input and returns one or
