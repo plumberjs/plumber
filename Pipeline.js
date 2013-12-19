@@ -28,6 +28,6 @@ module.exports = function(luigi) {
     luigi.as('hash').find('examples/*.js').run(['hash']).write('out');
 
     // Pass LESS files to less
-    luigi.as('less').find('examples/*.less').run(['less']).write('out/more.css');
+    luigi.as('less').find('examples/*.less').run(['less']).write('out');
 
 };
