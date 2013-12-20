@@ -2,7 +2,7 @@
   "name": "luigi",
   "version": "0.1.0",
   "description": "a tool for managing web asset pipelines",
-  "main": "luigi.js",
+  "main": "bin/luigi",
   "directories": {
     "example": "examples"
   },

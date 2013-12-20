@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 
 // TODO:
 //   * Handle RequireJS paths config somehow
@@ -31,7 +32,6 @@ function run(pipeline) {
             console.log("written to", dest.absolute());
         });
     }).catch(function(err) {
-        // FIXME: why not caught by parent errback?
         console.log("Luigi failed: ", err.stack);
     });
 }

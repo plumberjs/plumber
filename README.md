@@ -37,8 +37,8 @@ module.exports = function(luigi) {
 Note: the syntax is still being defined and may change radically in
 the future.
 
-You can then run each individual task with `node luigi.js <task>` or
-all of them with `node luigi.js`.
+You can then run each individual task with `luigi <task>` or
+all of them with `luigi`.
 
 
 ## Principles
