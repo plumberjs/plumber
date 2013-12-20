@@ -3,6 +3,9 @@ var stringToPath = require('../util/string-to-path');
 
 var q = require('q');
 var fs = require('fs');
+var mkdirpNode = require('mkdirp');
+
+var mkdirp = q.denodeify(mkdirpNode);
 
 var writeFile = q.denodeify(fs.writeFile);
 
@@ -24,7 +27,9 @@ module.exports = function(destination) {
                 destFile = destPath;
             }
 
-            return writeFile(destFile.absolute(), resource.data()).thenResolve(destFile);
+            return mkdirp(destFile.dirname()).then(function() {
+                return writeFile(destFile.absolute(), resource.data()).thenResolve(destFile);
+            });
         }));
     };
 };
