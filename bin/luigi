@@ -44,25 +44,21 @@ var pipelines = {};
 
 spec(pipelines);
 
-var pipelineArg = process.argv[2];
-if (pipelineArg) {
-    // Run specified pipeline
+var pipelineArgs = process.argv.slice(2);
+if (pipelineArgs.length === 0) {
+    // Run all pipelines
+    pipelineArgs = Object.keys(pipelines);
+}
+
+pipelineArgs.forEach(function(pipelineArg) {
     var pipeline = pipelines[pipelineArg];
-    console.log("Run pipeline: " + pipelineArg);
     if (! pipeline) {
         throw new Error('Pipeline not defined: ' + pipelineArg);
     }
 
+    console.log("Run pipeline: " + pipelineArg);
     run(pipeline);
-
-} else {
-    // Run all pipelines
-    Object.keys(pipelines).forEach(function(pipelineArg) {
-        var pipeline = pipelines[pipelineArg];
-        console.log("Run pipeline: " + pipelineArg);
-        run(pipeline);
-    });
-}
+});
 
 
 // TODO: allow outputing to dir, regardless of number of resources
