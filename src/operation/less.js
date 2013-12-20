@@ -6,14 +6,14 @@ var less = require('less');
 var render = q.denodeify(less.render);
 
 
-module.exports = function(/* no options */) {
+module.exports = function(options) {
     return function(resources) {
         return q.all(resources.map(function(resource) {
-            // TODO: extra options (filename, paths, yuicompress, etc)?
-            return render(resource.data()).then(function(cssData) {
+            // TODO: map extra options (filename, paths, yuicompress, etc)?
+            return render(resource.data(), options).then(function(cssData) {
                 return new Resource({
                     filename: resource.path().filename().replace('.less', '.css'),
-                  data: cssData
+                    data: cssData
                 });
             });
         }));
