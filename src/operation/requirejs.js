@@ -3,11 +3,14 @@ var Resource = require('../model/resource');
 var q = require('q');
 var requirejs = require('requirejs');
 var fs = require('fs');
+var flatten = require('flatten');
 
 var readFile = q.denodeify(fs.readFile);
 var unlink = q.denodeify(fs.unlink);
 
-module.exports = function(/* no options */) {
+module.exports = function(baseOptions) {
+    baseOptions = baseOptions || {};
+
     return function(resources) {
 
         // wrap requirejs.optimize as a promise
@@ -20,10 +23,7 @@ module.exports = function(/* no options */) {
             return defer.promise;
         }
 
-        if (resources.length > 1) {
-            // TODO: optimize each
-        } else {
-            var resource = resources[0];
+        return q.all(resources.map(function(resource) {
             // TODO: accept directory as input resource
             if (false && resource.isDirectory()) {
                 // TODO: optimize whole directory
@@ -39,6 +39,11 @@ module.exports = function(/* no options */) {
                     out: tmpFile
                 };
 
+                // FIXME: options should override this, not the other way around
+                Object.keys(baseOptions).forEach(function(key) {
+                    options[key] = baseOptions[key];
+                });
+
                 return optimize(options).then(function() {
                     // FIXME: don't hardcode encoding?
                     return readFile(tmpFile, 'utf-8');
@@ -48,11 +53,11 @@ module.exports = function(/* no options */) {
 
                     // and return generated data as a resource
                     return [new Resource({
-                        filename: resource.path(),
+                        filename: resource.path().filename(),
                         data: compiledData
                     })];
                 });
             }
-        }
+        })).then(flatten);
     };
 };
