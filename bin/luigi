@@ -20,6 +20,8 @@
 
 var q = require('q');
 
+var Report = require('../src/model/report');
+
 function execute(pipeline) {
   return pipeline.reduce(function(res, op) {
     return res.then(op);
@@ -27,10 +29,25 @@ function execute(pipeline) {
 }
 
 function run(pipeline) {
-    return execute(pipeline).then(function(dests) {
-        dests.forEach(function(dest) {
-            console.log("written to", dest.absolute());
+    return execute(pipeline).then(function(outputs) {
+        var reports = outputs.filter(function(output) {
+            return output instanceof Report;
         });
+
+        var others = outputs.filter(function(output) {
+            return ! (output instanceof Report);
+        });
+
+        if (others.length === 0) {
+            reports.forEach(function(report) {
+                console.log("written to", report.writtenResource.absolute());
+            });
+        } else {
+            console.log(others.length + ' unprocessed resources:');
+            others.forEach(function(other) {
+                console.log(other.filename());
+            });
+        }
     }).catch(function(err) {
         console.log("Luigi failed: ", err.stack);
     });

@@ -1,4 +1,5 @@
 var Resource = require('../model/resource');
+var Report = require('../model/report');
 var stringToPath = require('../util/string-to-path');
 
 var q = require('q');
@@ -8,6 +9,12 @@ var mkdirpNode = require('mkdirp');
 var mkdirp = q.denodeify(mkdirpNode);
 
 var writeFile = q.denodeify(fs.writeFile);
+
+
+function createReport(resource) {
+    return new Report(resource);
+}
+
 
 module.exports = function(destination) {
     return function(resources) {
@@ -28,7 +35,7 @@ module.exports = function(destination) {
             }
 
             return mkdirp(destFile.dirname()).then(function() {
-                return writeFile(destFile.absolute(), resource.data()).thenResolve(destFile);
+                return writeFile(destFile.absolute(), resource.data()).thenResolve(createReport(destFile));
             });
         }));
     };
