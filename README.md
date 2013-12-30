@@ -26,10 +26,10 @@ module.exports = function(luigi) {
     // minify and concatenate all JS files
     var sources = 'examples/**/*.js';
     var dest = 'out/out.js';
-    luigi['compile'] = [glob([sources]), uglify, concat, write(dest)];
+    luigi['compile'] = [glob(sources), uglify, concat, write(dest)];
 
     // compile all LESS files to CSS
-    luigi['stylesheets'] = [glob(['examples/*.less']), less, write('out')];
+    luigi['stylesheets'] = [glob('examples/*.less'), less, write('out')];
 
 };
 ```
