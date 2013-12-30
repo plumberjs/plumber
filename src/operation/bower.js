@@ -49,24 +49,33 @@ function bowerDirectory(moduleName, config) {
 }
 
 
+// FIXME: share
+function concatResources(func) {
+    return function(inResources, supervisor) {
+        return func(supervisor).then(function(outResources) {
+            return inResources.concat(outResources);
+        });
+    };
+}
+
 function bowerOperation(config) {
     return function(moduleName, files) {
-        return function(/* TODO: resources? */) {
+        return concatResources(function(supervisor) {
             var paths;
             // if files/patterns, use from component dir
             if (files) {
                 paths = bowerDirectory(moduleName, config).then(function(dir) {
-                    return glob.within(dir)(files)();
+                    return glob.within(dir)(files)([], supervisor);
                 });
-                // else use main files (if any)
+            // else use main files (if any)
             } else {
                 paths = bowerPaths(moduleName, config).then(function(paths) {
-                    return paths.map(filenameToResource);
+                    return glob(paths)([], supervisor);
                 });
             }
 
             return paths;
-        };
+        });
     };
 };
 

@@ -2,10 +2,7 @@ var Resource = require('../model/resource');
 
 var q = require('q');
 var path = require('path');
-var globLib = require('glob');
 var flatten = require('flatten');
-
-var glob = q.denodeify(globLib);
 
 function identity(x){ return x; }
 
@@ -17,35 +14,32 @@ function compose(f, g) {
     };
 }
 
-function filenameToResource(paths) {
-    return paths.map(function(path) {
-        return new Resource({path: path});
-    });
+// FIXME: share
+function concatResources(func) {
+    return function(inResources, supervisor) {
+        return func(supervisor).then(function(outResources) {
+            return inResources.concat(outResources);
+        });
+    };
 }
 
 function globOperation(mapper) {
-    function op(/* files... */) {
-        var fileList = flatten([].slice.call(arguments));
-        if (mapper) {
-            fileList = fileList.map(mapper);
-        }
-        return function(/* TODO: resources? */) {
-            return q.
-                // needed to avoid passing more map arguments to glob
-                all(fileList.map(function(f){ return glob(f); })).
-                then(flatten).
-                then(filenameToResource);
-        };
+    function glob(/* files... */) {
+        var fileList = flatten([].slice.call(arguments)).map(mapper);
+        return concatResources(function(supervisor) {
+            var glob = supervisor.glob.bind(supervisor);
+            return q.all(fileList.map(glob)).then(flatten);
+        });
     };
 
     // recursively compose mappers
-    op.within = function(directory) {
+    glob.within = function(directory) {
         return globOperation(compose(mapper, function(file) {
             return path.join(directory, file);
         }));
     };
 
-    return op;
+    return glob;
 };
 
 module.exports = globOperation(identity);
