@@ -1,3 +1,5 @@
+var appendResources = require('../util/append-resources');
+
 var q = require('q');
 var path = require('path');
 var flatten = require('flatten');
@@ -12,19 +14,10 @@ function compose(f, g) {
     };
 }
 
-// FIXME: share
-function concatResources(func) {
-    return function(inResources, supervisor) {
-        return func(supervisor).then(function(outResources) {
-            return inResources.concat(outResources);
-        });
-    };
-}
-
 function globOperation(mapper) {
     function glob(/* files... */) {
         var fileList = flatten([].slice.call(arguments)).map(mapper);
-        return concatResources(function(supervisor) {
+        return appendResources(function(supervisor) {
             var glob = supervisor.glob.bind(supervisor);
             return q.all(fileList.map(glob)).then(flatten);
         });

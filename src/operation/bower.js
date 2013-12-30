@@ -1,5 +1,7 @@
 var glob = require('./glob');
 
+var appendResources = require('../util/append-resources');
+
 var q = require('q');
 var flatten = require('flatten');
 var extend = require('extend');
@@ -36,18 +38,9 @@ function bowerDirectory(moduleName, config) {
 }
 
 
-// FIXME: share
-function concatResources(func) {
-    return function(inResources, supervisor) {
-        return func(supervisor).then(function(outResources) {
-            return inResources.concat(outResources);
-        });
-    };
-}
-
 function bowerOperation(config) {
     return function(moduleName, files) {
-        return concatResources(function(supervisor) {
+        return appendResources(function(supervisor) {
             var paths;
             // if files/patterns, use from component dir
             if (files) {
