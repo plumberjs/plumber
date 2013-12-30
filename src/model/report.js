@@ -1,11 +1,10 @@
 
-// TODO: standardise model
-// - success?
-// - type (written, test)
-// - written resources
-// - errors #, messages, files
-function Report(writtenResource) {
-    this.writtenResource = writtenResource;
+// TODO: standardise model (errors, etc)
+function Report(params) {
+    this.writtenResource = params.resource;
+    this.type    = params.type;
+    this.success = 'success' in params ? params.success : true;
+    this.errors  = params.errors || [];
 }
 
 module.exports = Report;

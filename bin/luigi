@@ -25,7 +25,18 @@ function outputReports(resources) {
     });
 
     reports.forEach(function(report) {
-        console.log("written to", report.writtenResource.absolute());
+        if (report.success) {
+            // FIXME: not necessarily written, maybe just passed test
+            if (report.type === 'write') {
+                console.log("written to", report.writtenResource.absolute());
+            } else {
+                console.log("success with", report.writtenResource.filename());
+            }
+        } else {
+            // FIXME: show error
+            console.log("error with", report.writtenResource.filename());
+            console.log(report.errors);
+        }
     });
 
     return resources.filter(function(output) {

@@ -11,7 +11,8 @@
     "mkdirp": "~0.3.5",
     "bower": "~1.2.8",
     "nopt": "~2.1.2",
-    "extend": "~1.2.1"
+    "extend": "~1.2.1",
+    "jshint": "~2.4.0"
   },
   "devDependencies": {
     "q": "~0.9.7",

@@ -1,4 +1,3 @@
-var Resource = require('../model/resource');
 var Report = require('../model/report');
 var stringToPath = require('../util/string-to-path');
 
@@ -12,7 +11,10 @@ var writeFile = q.denodeify(fs.writeFile);
 
 
 function createReport(resource) {
-    return new Report(resource);
+    return new Report({
+        resource: resource,
+        type: 'write'
+    });
 }
 
 
