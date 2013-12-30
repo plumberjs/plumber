@@ -1,23 +1,10 @@
-var Resource = require('../model/resource');
-
 var glob = require('./glob');
 
 var q = require('q');
 var flatten = require('flatten');
+var extend = require('extend');
 var bower = require('bower');
 
-
-function filenameToResource(path) {
-  return new Resource({path: path});
-}
-
-// FIXME: use native helper?
-function extend(source, props) {
-    Object.keys(props).forEach(function(key) {
-        source[key] = props[key];
-    });
-    return source;
-}
 
 function bowerList(options, config) {
   var defer = q.defer();

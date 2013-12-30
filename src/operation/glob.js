@@ -1,5 +1,3 @@
-var Resource = require('../model/resource');
-
 var q = require('q');
 var path = require('path');
 var flatten = require('flatten');
