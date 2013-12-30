@@ -9,7 +9,8 @@
   "dependencies": {
     "less": "~1.4.2",
     "mkdirp": "~0.3.5",
-    "bower": "~1.2.8"
+    "bower": "~1.2.8",
+    "nopt": "~2.1.2"
   },
   "devDependencies": {
     "q": "~0.9.7",
