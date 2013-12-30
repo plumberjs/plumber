@@ -98,6 +98,7 @@ pipelineArgs.forEach(function(pipelineArg) {
             var gaze = require('gaze');
             gaze(supervisor.includes, function() {
                 this.on('all', function(event, filepath) {
+                    console.log("Re-run pipeline: " + pipelineArg);
                     run(pipeline, supervisor);
                 });
             });
