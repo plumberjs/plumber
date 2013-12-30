@@ -15,10 +15,7 @@ module.exports = function(/* no options */) {
         var mapping = {};
         var hashedResources = resources.map(function(resource) {
             var hashKey = hash(resource.data());
-            var hashedResource = new Resource({
-                filename: resource.filename().replace(/(\.[^.]+)$/, ['.', hashKey, '$1'].join('')),
-                data:     resource.data()
-            });
+            var hashedResource = resource.withTransformation('hashed', hashKey);
             mapping[resource.filename()] = hashedResource.filename();
             return hashedResource;
         });
