@@ -10,10 +10,6 @@ module.exports = function(/* pipelinesOrOperations... */) {
         return flatten([pipeOrOp]);
     });
 
-    return function(resources, _, prevStep) {
-        return q.all(pipelines.map(function(pipeline) {
-            // FIXME: expose subpipeline in Step chain by returning step, not resources
-            return execute(pipeline, prevStep).output;
-        })).then(flatten);
-    };
+    // FIXME: hacky!
+    return pipelines;
 };

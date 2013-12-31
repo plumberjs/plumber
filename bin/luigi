@@ -3,6 +3,7 @@
 var nopt = require('nopt');
 
 var run = require('../src/core').run;
+var execute = require('../src/core').execute;
 
 var cwd = process.cwd();
 var spec = require(cwd + '/Pipeline.js');
@@ -30,19 +31,29 @@ pipelineArgs.forEach(function(pipelineArg) {
     var finalStep = run(pipeline);
 
     // Report errors if any
-    finalStep.output.catch(function(err) {
+    var output = finalStep.output();
+    output.catch(function(err) {
         console.log("Luigi failed: ", err.stack);
     });
 
     if (cli.watch) {
-        finalStep.output.then(function() {
-            var gaze = require('gaze');
-            gaze(supervisor.includes, function() {
-                this.on('all', function(event, filepath) {
+        output.then(function() {
+            // FIXME: gaze is still observing, more and more!
+            function monitor() {
+                return finalStep.monitor().then(function() {
                     console.log("Re-run pipeline: " + pipelineArg);
-                    run(pipeline, supervisor);
-                });
-            });
+                    // finalStep.output().catch(function(err) {
+                    finalStep.output().then(function() {
+                        console.log("done", arguments)
+                    }).catch(function(err) {
+                        console.log("Luigi failed: ", err.stack);
+                    });
+                }).then(monitor);
+            }
+
+            console.log(finalStep)
+
+            monitor();
         });
     }
 });

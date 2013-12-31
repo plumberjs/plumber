@@ -1,20 +1,20 @@
 var Report = require('../src/model/report');
-var Supervisor = require('../src/util/supervisor');
 
-var q = require('q');
+var steps = require('../src/model/step');
+var Step = steps.Step;
+var InitialStep = steps.InitialStep;
+var MultiStep = steps.MultiStep;
+
 
 
 function execute(pipeline, initialStep) {
     return pipeline.reduce(function(prevStep, operation) {
-        var supervisor = new Supervisor();
-        return {
-            operation: operation,
-            previous: prevStep,
-            output: prevStep.output.then(function(res) {
-                return operation(res, supervisor, prevStep);
-            }),
-            supervisor: supervisor
-        };
+        // FIXME: hacky!
+        if (typeof operation === 'function') {
+            return new Step(operation, prevStep);
+        } else {
+            return new MultiStep(operation, prevStep);
+        }
     }, initialStep);
 }
 
@@ -25,11 +25,7 @@ function run(pipeline) {
         warnRemainingResources
     );
 
-    var initialStep = {
-        output: q([]),
-        supervisor: new Supervisor()
-    };
-    return execute(operations, initialStep);
+    return execute(operations, new InitialStep());
 }
 
 
