@@ -5,6 +5,28 @@ var gaze = require('gaze');
 var flatten = require('flatten');
 
 
+function gazePromise(files) {
+    var defer = q.defer();
+    gaze(files, function() {
+        this.on('all', function(event, filepath) {
+            defer.resolve();
+        });
+    });
+    return defer.promise;
+}
+
+
+// Return a promise that resolves when any of the promises in the list resolves
+function any(/* promises... */) {
+    var defer = q.defer();
+    var promises = flatten([].slice.call(arguments));
+    promises.forEach(function(promise) {
+        promise.then(defer.resolve);
+    });
+    return defer.promise;
+}
+
+
 function Step(operation, previous) {
     this._supervisor = new Supervisor();
     this._operation = operation;
@@ -21,29 +43,21 @@ Step.prototype.output = function() {
 };
 
 
-// FIXME: cleanup
 Step.prototype.monitor = function() {
-    // if this supervisor sees change OR if previous changes
-    var self = this;
-    var defer = q.defer();
 console.log("monitor", this._supervisor.includes)
-    gaze(this._supervisor.includes, function() {
-        this.on('all', function(event, filepath) {
-            console.log("Re-run operation (changes)");
-            // Prune cached output
-            delete self._output;
-            defer.resolve();
-            // FIXME: internal operations in pipeline
-            // FIXME: run vs execute
-            // run(subpipeline, previous);
-        });
+
+    // if this supervisor sees change OR if previous changes
+    var filesChanged = gazePromise(this._supervisor.includes).then(function() {
+        console.log("Re-run operation (changes)");
     });
-    this._previous.monitor().then(function() {
+    var previousChanged = this._previous.monitor().then(function() {
         console.log("Re-run operation (previous)");
-        delete self._output;
-        defer.resolve();
     });
-    return defer.promise
+
+    return any(filesChanged, previousChanged).then(function() {
+        // Prune cached output
+        delete this._output;
+    }.bind(this));
 };
 
 
@@ -79,21 +93,20 @@ MultiStep.prototype.output = function() {
 
 
 MultiStep.prototype.monitor = function() {
-    // if any sub-step sees change OR if previous changes
-    var gaze = require('gaze');
-    var defer = q.defer();
     console.log("monitor multi")
-    this._lastSteps.forEach(function(step) {
-        step.monitor().then(function() {
-            console.log("Re-run multi (inside)");
-            defer.resolve();
-        });
+
+    // if any sub-step sees change OR if previous changes
+    var subChanged = any(this._lastSteps.map(function(step) {
+        return step.monitor();
+    })).then(function() {
+        console.log("Re-run multi (inside)");
     });
-    this._previous.monitor().then(function() {
+
+    var previousChanged = this._previous.monitor().then(function() {
         console.log("Re-run multi (previous)");
-        defer.resolve();
     });
-    return defer.promise;
+
+    return any(subChanged, previousChanged);
 };
 
 
