@@ -1,66 +1,8 @@
 #!/usr/bin/env node
 
-
-var q = require('q');
 var nopt = require('nopt');
 
-var Report = require('../src/model/report');
-
-var Supervisor = require('../src/util/supervisor');
-
-
-function execute(pipeline, supervisor) {
-    return pipeline.reduce(function(res, op) {
-        // return res.then(op);
-        return res.then(function(r) {
-            return op(r, supervisor);
-        });
-    }, q([]));
-}
-
-function outputReports(resources) {
-    // FIXME: use partition instead?
-    var reports = resources.filter(function(output) {
-        return output instanceof Report;
-    });
-
-    reports.forEach(function(report) {
-        if (report.success) {
-            // FIXME: not necessarily written, maybe just passed test
-            if (report.type === 'write') {
-                console.log("written to", report.writtenResource.absolute());
-            } else {
-                console.log("success with", report.writtenResource.filename());
-            }
-        } else {
-            // FIXME: show error
-            console.log("error with", report.writtenResource.filename());
-            console.log(report.errors);
-        }
-    });
-
-    return resources.filter(function(output) {
-        return ! (output instanceof Report);
-    });
-}
-
-function warnRemainingResources(resources) {
-    if (resources.length > 0) {
-        console.log(resources.length + ' unprocessed resources:');
-        resources.forEach(function(other) {
-            console.log(other.filename());
-        });
-    }
-}
-
-function run(pipeline, supervisor) {
-    var operations = pipeline.concat(
-        outputReports,
-        warnRemainingResources
-    );
-    return execute(operations, supervisor);
-}
-
+var run = require('../src/core').run;
 
 var cwd = process.cwd();
 var spec = require(cwd + '/Pipeline.js');
@@ -85,16 +27,15 @@ pipelineArgs.forEach(function(pipelineArg) {
 
     console.log("Run pipeline: " + pipelineArg);
 
-    var supervisor = new Supervisor();
-    var output = run(pipeline, supervisor);
+    var finalStep = run(pipeline);
 
     // Report errors if any
-    output.catch(function(err) {
+    finalStep.output.catch(function(err) {
         console.log("Luigi failed: ", err.stack);
     });
 
     if (cli.watch) {
-        output.then(function() {
+        finalStep.output.then(function() {
             var gaze = require('gaze');
             gaze(supervisor.includes, function() {
                 this.on('all', function(event, filepath) {
