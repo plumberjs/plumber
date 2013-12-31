@@ -12,7 +12,8 @@
     "bower": "~1.2.8",
     "nopt": "~2.1.2",
     "extend": "~1.2.1",
-    "jshint": "~2.4.0"
+    "jshint": "~2.4.0",
+    "lodash-cli": "~2.4.1"
   },
   "devDependencies": {
     "q": "~0.9.7",
