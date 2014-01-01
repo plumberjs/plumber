@@ -31,7 +31,7 @@ module.exports = function(baseOptions) {
 
             var options = {
                 // FIXME: do we always want to use baseUrl?
-                //        or as explicit luigi scope?
+                //        or as explicit argument?
                 baseUrl: resource.path().dirname(),
                 name: pathNoExt,
                 out: tmpFile

@@ -1,5 +1,5 @@
-Luigi
-=====
+Plumber
+=======
 
 A Node-based tool for managing declarative web asset pipelines.
 
@@ -21,15 +21,15 @@ var concat = require('./src/operation/concat')();
 var less = require('./src/operation/less')();
 var write = require('./src/operation/write');
 
-module.exports = function(luigi) {
+module.exports = function(pipelines) {
 
     // minify and concatenate all JS files
     var sources = 'examples/**/*.js';
     var dest = 'out/out.js';
-    luigi['compile'] = [glob(sources), uglify, concat, write(dest)];
+    pipelines['compile'] = [glob(sources), uglify, concat, write(dest)];
 
     // compile all LESS files to CSS
-    luigi['stylesheets'] = [glob('examples/*.less'), less, write('out')];
+    pipelines['stylesheets'] = [glob('examples/*.less'), less, write('out')];
 
 };
 ```
@@ -37,8 +37,8 @@ module.exports = function(luigi) {
 Note: the syntax is still being defined and may change radically in
 the future.
 
-You can then run each individual task with `luigi <task>` or
-all of them with `luigi`.
+You can then run each individual task with `plumber <task>` or
+all of them with `plumber`.
 
 
 ## Principles
@@ -72,7 +72,7 @@ report.
 An operation should only be concerned about doing a single thing well,
 and it is asynchronous by default using Promises.  Performance
 optimisation such as parallelism and caching are outside the scope of
-operations; instead, they are the sole concern of Luigi.
+operations; instead, they are the sole concern of Plumber.
 
 File data is currently being passed as strings, rather than streams,
 because most libraries that operations wrap do not support streams
@@ -89,6 +89,6 @@ executed imperatively.
 ### [Gulp](https://github.com/wearefractal/gulp) and [James](https://github.com/leonidas/james.js)
 
 Both are stream-based pipelines of operations.  The main difference
-with Luigi is the current lack of support for auxiliary files
+with Plumber is the current lack of support for auxiliary files
 (e.g. sourcemaps) and the treatment of watch as a special listener
 which triggers a given block (e.g. re-run) on change.

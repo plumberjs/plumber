@@ -1,8 +1,8 @@
 {
-  "name": "luigi",
+  "name": "plumber",
   "version": "0.1.0",
   "description": "a tool for managing web asset pipelines",
-  "main": "bin/luigi",
+  "main": "bin/plumber",
   "directories": {
     "example": "examples"
   },
@@ -29,7 +29,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/theefer/luigi.git"
+    "url": "git://github.com/theefer/plumber.git"
   },
   "keywords": [
     "build",
@@ -39,6 +39,6 @@
   "author": "Sébastien Cevey <seb@cine7.net>",
   "license": "GPL",
   "bugs": {
-    "url": "https://github.com/theefer/luigi/issues"
+    "url": "https://github.com/theefer/plumber/issues"
   }
 }
