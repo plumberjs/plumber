@@ -2,8 +2,8 @@
 
 var nopt = require('nopt');
 
-var run = require('../src/core').run;
-var execute = require('../src/core').execute;
+var run = require('../lib/core').run;
+var execute = require('../lib/core').execute;
 
 var cwd = process.cwd();
 var spec = require(cwd + '/Pipeline.js');

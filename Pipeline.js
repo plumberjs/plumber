@@ -1,10 +1,10 @@
-var glob = require('./src/operation/glob');
-var uglify = require('./src/operation/uglify')();
-var concat = require('./src/operation/concat')();
-var requirejs = require('./src/operation/requirejs')();
-var hash = require('./src/operation/hash')();
-var less = require('./src/operation/less')();
-var write = require('./src/operation/write');
+var glob = require('./lib/operation/glob');
+var uglify = require('./lib/operation/uglify')();
+var concat = require('./lib/operation/concat')();
+var requirejs = require('./lib/operation/requirejs')();
+var hash = require('./lib/operation/hash')();
+var less = require('./lib/operation/less')();
+var write = require('./lib/operation/write');
 
 module.exports = function(pipelines) {
 

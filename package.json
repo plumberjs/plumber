@@ -3,9 +3,10 @@
   "version": "0.1.0",
   "description": "a tool for managing web asset pipelines",
   "main": "bin/plumber",
-  "bin": "bin/plumber",
   "directories": {
-    "example": "examples"
+    "lib":     "./lib",
+    "bin":     "./bin",
+    "example": "./examples"
   },
   "dependencies": {
     "less": "~1.4.2",
