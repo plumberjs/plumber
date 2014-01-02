@@ -1,6 +1,6 @@
 {
   "name": "plumber",
-  "version": "0.1.8",
+  "version": "0.1.9",
   "description": "a tool for managing web asset pipelines",
   "main": "index",
   "directories": {
@@ -9,19 +9,11 @@
     "example": "./examples"
   },
   "dependencies": {
-    "less": "~1.4.2",
-    "mkdirp": "~0.3.5",
-    "bower": "~1.2.8",
     "nopt": "~2.1.2",
     "extend": "~1.2.1",
-    "jshint": "~2.4.0",
-    "lodash-cli": "~2.4.1",
     "q": "~0.9.7",
-    "requirejs": "~2.1.8",
     "glob": "~3.2.6",
-    "uglify-js": "~2.4.0",
     "flatten": "0.0.1",
-    "crypto": "0.0.3",
     "gaze": "~0.4.3"
   },
   "scripts": {
