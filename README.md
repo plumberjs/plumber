@@ -3,11 +3,10 @@ Plumber
 
 A Node-based tool for managing declarative web asset pipelines.
 
-*This project is a functional proof-of-concept -- feedback welcome!*
 
 ## Example
 
-The `Pipeline.js` file below describes two tasks:
+The `Pipeline.js` file below describes two pipelines:
 
 - *compile*: Minifies all `*.js` files found in the `examples`
   directory and concatenates the result into a single `out/out.js` file.
@@ -37,7 +36,7 @@ module.exports = function(pipelines) {
 Note: the syntax is still being defined and may change radically in
 the future.
 
-You can then run each individual task with `plumber <task>` or
+You can then run each individual pipeline with `plumber <pipeline>` or
 all of them with `plumber`.
 
 
