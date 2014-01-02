@@ -1,0 +1,52 @@
+* GENERAL
+** OK LESS sourcemap
+** OK LESS file monitoring
+** don't concat sourcemaps with code (typing)
+** concat should smartly map sourcemap, not concat them
+** clean-css or cssmin or uglifycss operation, with sourcemap support
+** don't hash uglifyjs sourcemaps
+** RequireJS sourcemap
+** maintain filename for sourcemaps?
+** resource typing (report, js, asset maps, source map, etc)
+
+** fix dirty MultiStep hack
+** fix leaking monitor() promises and gaze()
+** cleaner custom dest per resource
+
+** handle RequireJS paths config somehow
+
+** for ALL operations, record any watched file, also Pipeline.js
+** exclude internal operations (finalisation) from step chain?
+** compose pipelines by name?
+
+** pass each resource individually through steps, not as a F[L[Resource]]
+** use "Observables"? fire on find, then on changes
+
+** first-order support for files, incl/excl, glob?
+
+** proxy options explicitly?
+
+** use Harmony modules and other patterns (let, etc)?
+** add tests!
+
+
+* LESS
+** compress or sourcemaps? vs concat?
+
+* REQUIRE
+** split out uglification?
+
+* JSHINT
+** cleaner output, retval
+
+* LODASH
+** cleaner options, code
+
+* UGLIFY
+** don't rely on there being an abs path
+
+* KARMA
+* GLUE
+
+* usage:
+**  plumber <pipelines ...> -- <files>
