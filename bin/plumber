@@ -33,7 +33,7 @@ pipelineArgs.forEach(function(pipelineArg) {
     // Report errors if any
     var output = finalStep.output();
     output.catch(function(err) {
-        console.log("Luigi failed: ", err.stack);
+        console.log("Plumber failed: ", err.stack);
     });
 
     if (cli.watch) {
@@ -46,7 +46,7 @@ pipelineArgs.forEach(function(pipelineArg) {
                     finalStep.output().then(function() {
                         console.log("done", arguments)
                     }).catch(function(err) {
-                        console.log("Luigi failed: ", err.stack);
+                        console.log("Plumber failed: ", err.stack);
                     });
                 }).then(monitor);
             }
