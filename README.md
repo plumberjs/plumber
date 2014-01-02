@@ -15,11 +15,11 @@ The `Pipeline.js` file below describes two tasks:
   them in the `out` directory.
 
 ```
-var glob = require('./lib/operation/glob');
-var uglify = require('./lib/operation/uglify')();
-var concat = require('./lib/operation/concat')();
-var less = require('./lib/operation/less')();
-var write = require('./lib/operation/write');
+var glob   = require('plumber-glob');
+var uglify = require('plumber-uglify')();
+var concat = require('plumber-concat')();
+var less   = require('plumber-less')();
+var write  = require('plumber-write');
 
 module.exports = function(pipelines) {
 
