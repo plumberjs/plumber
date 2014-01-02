@@ -2,7 +2,7 @@
   "name": "plumber",
   "version": "0.1.6",
   "description": "a tool for managing web asset pipelines",
-  "main": "lib/index",
+  "main": "index",
   "directories": {
     "lib": "./lib",
     "bin": "./bin",
