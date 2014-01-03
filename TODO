@@ -1,17 +1,19 @@
 * GENERAL
-** OK LESS sourcemap
-** OK LESS file monitoring
-** don't concat sourcemaps with code (typing)
 ** concat should smartly map sourcemap, not concat them
+** uglify doesn't produce sourceMap=?
 ** clean-css or cssmin or uglifycss operation, with sourcemap support
-** don't hash uglifyjs sourcemaps
+** rename should smartly update sourcemap
 ** RequireJS sourcemap
 ** maintain filename for sourcemaps?
-** resource typing (report, js, asset maps, source map, etc)
+
+** cleaner custom dest per resource: filter by type, then use pipeline?
+   all(
+     [filter.type('javascript'), writeToDist],
+     [filter.type('json'), writeToOther]
+   )
 
 ** fix dirty MultiStep hack
 ** fix leaking monitor() promises and gaze()
-** cleaner custom dest per resource
 
 ** handle RequireJS paths config somehow
 
