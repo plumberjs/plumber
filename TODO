@@ -1,16 +1,9 @@
 * GENERAL
-** concat should smartly map sourcemap, not concat them
-** uglify doesn't produce sourceMap=?
-** clean-css or cssmin or uglifycss operation, with sourcemap support
-** rename should smartly update sourcemap
 ** RequireJS sourcemap
-** maintain filename for sourcemaps?
-
-** cleaner custom dest per resource: filter by type, then use pipeline?
-   all(
-     [filter.type('javascript'), writeToDist],
-     [filter.type('json'), writeToOther]
-   )
+** UglifyJS sourcemap has sources=?
+** Sourcemap's file should be src, not map?
+** clean-css or cssmin or uglifycss operation, with sourcemap support
+** write should smartly update sourcemap based on filename (e.g. after rename, hash)
 
 ** fix dirty MultiStep hack
 ** fix leaking monitor() promises and gaze()
