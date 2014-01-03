@@ -15,7 +15,7 @@ The `Pipeline.js` file below describes two pipelines:
 
 ```
 var glob   = require('plumber-glob');
-var uglify = require('plumber-uglify')();
+var uglify = require('plumber-uglifyjs')();
 var concat = require('plumber-concat')();
 var less   = require('plumber-less')();
 var write  = require('plumber-write');
