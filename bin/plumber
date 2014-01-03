@@ -2,8 +2,8 @@
 
 var nopt = require('nopt');
 
-var run = require('plumber').run;
-var execute = require('plumber').execute;
+var run = require('..').run;
+var execute = require('..').execute;
 
 var cwd = process.cwd();
 var spec = require(cwd + '/Pipeline.js');
