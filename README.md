@@ -24,8 +24,8 @@ module.exports = function(pipelines) {
 
     // minify and concatenate all JS files
     var sources = 'examples/**/*.js';
-    var dest = 'out/out.js';
-    pipelines['compile'] = [glob(sources), uglify, concat, write(dest)];
+    var dest = 'out';
+    pipelines['compile'] = [glob(sources), uglify, concat('all'), write(dest)];
 
     // compile all LESS files to CSS
     pipelines['stylesheets'] = [glob('examples/*.less'), less, write('out')];

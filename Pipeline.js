@@ -1,6 +1,6 @@
 var glob      = require('plumber-glob');
 var uglify    = require('plumber-uglifyjs')();
-var concat    = require('plumber-concat')();
+var concat    = require('plumber-concat');
 var requirejs = require('plumber-requirejs')();
 var hash      = require('plumber-hash')();
 var less      = require('plumber-less')();
@@ -9,16 +9,14 @@ var write     = require('plumber-write');
 module.exports = function(pipelines) {
 
     var sources = 'examples/**/*.js';
-    var dest = 'out/out.js';
-    var compile = [glob(sources), uglify, concat, write(dest)];
-
-    pipelines['compile'] = compile;
+    var dest = 'out';
+    var writeToOut = write('out');
 
     // Pass all JS files through pipeline
-    pipelines['concat'] = [glob('examples/*.js'), uglify, concat, write('out/out.js')];
+    pipelines['concat'] = [glob('examples/*.js'), uglify, concat('all'), writeToOut];
 
     // Minify all files and write to out directory
-    pipelines['uglify'] = [glob('examples/*.js'), uglify, write('out')];
+    pipelines['uglify'] = [glob('examples/*.js'), uglify, writeToOut];
 
     // Minify all files and try to write to single file -- FAILS!
     pipelines['uglify-fail'] = [glob('examples/*.js'), uglify, write('out/singlefile.js')];
