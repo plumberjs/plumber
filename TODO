@@ -1,9 +1,7 @@
 * GENERAL
 ** RequireJS sourcemap
-** UglifyJS sourcemap has sources=?
-** Sourcemap's file should be src, not map?
 ** clean-css or cssmin or uglifycss operation, with sourcemap support
-** write should smartly update sourcemap based on filename (e.g. after rename, hash)
+** Concat should create sourcemap when none available (e.g. pristine JS/CSS file)
 
 ** fix dirty MultiStep hack
 ** fix leaking monitor() promises and gaze()
@@ -26,7 +24,7 @@
 
 
 * LESS
-** compress or sourcemaps? vs concat?
+** compress? vs concat?
 
 * REQUIRE
 ** split out uglification?
