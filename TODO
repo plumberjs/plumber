@@ -12,7 +12,7 @@
 
 ** for ALL operations, record any watched file, also Pipeline.js
 ** exclude internal operations (finalisation) from step chain?
-** compose pipelines by name?
+** compose pipelines by name? by reference?
 
 ** pass each resource individually through steps, not as a F[L[Resource]]
 ** use "Observables"? fire on find, then on changes
@@ -23,6 +23,9 @@
 
 ** use Harmony modules and other patterns (let, etc)?
 ** add tests!
+
+** input files can be provided to the CLI, programmatic or configured
+** sensible defaults, incl config packs (for dev, prod)
 
 
 * LESS
