@@ -8,7 +8,6 @@
     "example": "./examples"
   },
   "dependencies": {
-    "nopt": "~2.1.2",
     "extend": "~1.2.1",
     "q": "~0.9.7",
     "glob": "~3.2.6",
