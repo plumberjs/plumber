@@ -1,7 +1,9 @@
 * GENERAL
 ** RequireJS sourcemap
+** Sourcemap path: relative? filesystem vs http? sane defaults, easy config?
 ** clean-css or cssmin or uglifycss operation, with sourcemap support
-** Concat should create sourcemap when none available (e.g. pristine JS/CSS file)
+** Concat: pikaday off by one?
+** Concat: if source abspath missing?
 
 ** fix dirty MultiStep hack
 ** fix leaking monitor() promises and gaze()
