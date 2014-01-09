@@ -3,41 +3,123 @@ Plumber
 
 A Node-based tool for managing declarative web asset pipelines.
 
+To install plumber, use `npm` to install the `plumber-cli` module
+(globally for ease of use):
+
+```
+$ sudo npm install -g plumber-cli
+```
+
 
 ## Example
 
-The `Pipeline.js` file below describes two pipelines:
-
-- *compile*: Minifies all `*.js` files found in the `examples`
-  directory and concatenates the result into a single `out/out.js` file.
-- *stylesheets*: Compiles all LESS files into CSS and write
-  them in the `out` directory.
-
 ```
-var glob   = require('plumber-glob');
-var uglify = require('plumber-uglifyjs')();
-var concat = require('plumber-concat')();
-var less   = require('plumber-less')();
-var write  = require('plumber-write');
+var all       = require('plumber-all');
+var glob      = require('plumber-glob');
+var bower     = require('plumber-bower');
+var requirejs = require('plumber-requirejs');
+var uglifyjs  = require('plumber-uglifyjs')();
+var hash      = require('plumber-hash')();
+var concat    = require('plumber-concat');
+var less      = require('plumber-less')();
+var filter    = require('plumber-filter');
+var write     = require('plumber-write');
 
 module.exports = function(pipelines) {
 
-    // minify and concatenate all JS files
-    var sources = 'examples/**/*.js';
-    var dest = 'out';
-    pipelines['compile'] = [glob(sources), uglify, concat('all'), write(dest)];
+    var sources = glob.within('src');
+    var writeToDist = write('dist');
 
-    // compile all LESS files to CSS
-    pipelines['stylesheets'] = [glob('examples/*.less'), less, write('out')];
+    var requireConfig = {
+        paths: {
+            'event-emitter': '../../eventEmitter/EventEmitter'
+        },
+        shim: {
+            'event-emitter': {exports: 'EventEmitter'}
+        }
+    };
+
+    // Compile all JavaScript
+    pipelines['compile:js'] = [
+        all(
+            sources('js/require.conf.js'),
+            [sources('js/modules/app.js'), requirejs(requireConfig)],
+            bower('underscore'),
+            bower('pikaday', 'pikaday.js')
+        ),
+        uglifyjs,
+        hash,
+        writeToDist
+    ];
+
+    // Compile stylesheets
+    pipelines['compile:css'] = [
+        all(
+            sources('stylesheets/reset.css'),
+            [sources('stylesheets/less/*.less'), less],
+            [bower('pikaday'), filter.type('css')]
+        ),
+        concat('style'),
+        writeToDist
+    ];
 
 };
 ```
 
-Note: the syntax is still being defined and may change radically in
-the future.
+The `Plumbing.js` file above defines two sample pipelines:
 
-You can then run each individual pipeline with `plumber <pipeline>` or
+- *compile:js*: Take all of the RequireJS config file, the main AMD
+   `app.js` file compiled by RequireJS, the file exported by the
+   `underscore` Bower component and the `pikaday.js` file in the
+   `pikaday` Bower component, minimise all the JavaScript, hash the
+   filenames and write the resulting JavaScript, sourcemaps and asset
+   mapping files in the `dist` directory.
+
+- *compile:css*: Take all of the `reset.css` file, the LESS files
+  compiled to CSS, and the CSS files exported by the `pikaday`
+  Bower component, concatenate them all into a single file named
+  `style.css` and write the result in the `dist` directory.
+
+You can run each individual pipeline with `plumber <pipeline>` or
 all of them with `plumber`.
+
+*Note: the syntax is still being defined and may change in the
+future.*
+
+
+## Operations
+
+### Sourcing
+
+- [glob](https://github.com/theefer/plumber-glob): find files using a path or pattern
+- [bower](https://github.com/theefer/plumber-bower): find files from a Bower component
+- [lodash](https://github.com/theefer/plumber-lodash): generate a custom [Lo-Dash](http://lodash.com/) build
+
+### Outputting
+
+- [write](https://github.com/theefer/plumber-write): write the result into files or directories
+
+### Compilation
+
+- [less](https://github.com/theefer/plumber-less): compile LESS files to CSS
+- [requirejs](https://github.com/theefer/plumber-requirejs): compile an AMD module and its dependencies together
+- [uglifyjs](https://github.com/theefer/plumber-uglifyjs): minimise JavaScript
+
+### Transformation
+
+- [rename](https://github.com/theefer/plumber-rename): rename the filename of the input
+- [concat](https://github.com/theefer/plumber-concat): concatenate all the input together
+- [filter](https://github.com/theefer/plumber-filter): filter the input (e.g. based on file type)
+- [hash](https://github.com/theefer/plumber-hash): hash the filenames and generate a mapping
+
+### Testing
+
+- [jshint](https://github.com/theefer/plumber-jshint): run [JSHint](http://www.jshint.com/) on the input and produce a report
+
+### Meta-operation
+
+- [all](https://github.com/theefer/plumber-all): pass the input into the given set of operations and return the result
+
 
 
 ## Principles

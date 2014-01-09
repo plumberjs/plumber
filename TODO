@@ -21,6 +21,8 @@
 
 ** proxy options explicitly?
 
+** wrap each operation with catch to report what step caused the error
+
 ** use Harmony modules and other patterns (let, etc)?
 ** add tests!
 
