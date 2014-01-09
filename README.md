@@ -92,7 +92,7 @@ future.*
 ### Sourcing
 
 - [glob](https://github.com/theefer/plumber-glob): find files using a path or pattern
-- [bower](https://github.com/theefer/plumber-bower): find files from a Bower component
+- [bower](https://github.com/theefer/plumber-bower): find files from a [Bower](http://bower.io/) component
 - [lodash](https://github.com/theefer/plumber-lodash): generate a custom [Lo-Dash](http://lodash.com/) build
 
 ### Outputting
@@ -101,9 +101,9 @@ future.*
 
 ### Compilation
 
-- [less](https://github.com/theefer/plumber-less): compile LESS files to CSS
+- [less](https://github.com/theefer/plumber-less): compile [LESS](http://lesscss.org/) files to CSS
 - [requirejs](https://github.com/theefer/plumber-requirejs): compile an AMD module and its dependencies together
-- [uglifyjs](https://github.com/theefer/plumber-uglifyjs): minimise JavaScript
+- [uglifyjs](https://github.com/theefer/plumber-uglifyjs): minimise JavaScript using [UglifyJS](http://lisperator.net/uglifyjs/)
 
 ### Transformation
 
