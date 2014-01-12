@@ -1,6 +1,6 @@
 {
   "name": "plumber",
-  "version": "0.1.17",
+  "version": "0.1.18",
   "description": "A tool for managing web asset pipelines",
   "main": "index",
   "directories": {
