@@ -1,5 +1,5 @@
 * GENERAL
-** RequireJS sourcemap
+** UglifyJS depends on path being there?
 ** Sourcemap path: relative? filesystem vs http? sane defaults, easy config?
 ** clean-css or cssmin or uglifycss operation, with sourcemap support
 ** Concat: pikaday off by one?
