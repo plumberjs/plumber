@@ -4,9 +4,10 @@ var Resource = require('./lib/model/resource');
 var Report   = require('./lib/model/report');
 var steps    = require('./lib/model/step');
 
+var stringToPath    = require('./lib/util/string-to-path');
 var appendResources = require('./lib/util/append-resources');
 var mapEachResource = require('./lib/util/map-each-resource');
-var stringToPath    = require('./lib/util/string-to-path');
+var mapEachResourceSerially = require('./lib/util/map-each-resource-serially');
 
 module.exports = {
     execute: core.execute,
@@ -19,5 +20,6 @@ module.exports = {
     // TODO: move to plumber-util package?
     appendResources: appendResources,
     mapEachResource: mapEachResource,
+    mapEachResourceSerially: mapEachResourceSerially,
     stringToPath: stringToPath
 };
