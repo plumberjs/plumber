@@ -1,11 +1,11 @@
 * GENERAL
-** UglifyJS depends on path being there?
-** Sourcemap path: relative? filesystem vs http? sane defaults, easy config?
+** Fix JavaScript sourcemaps: requirejs paths, uglify ok?
 ** clean-css or cssmin or uglifycss operation, with sourcemap support
 ** Concat: pikaday off by one?
 ** Concat: if source abspath missing?
+** RequireJS: record dependencies in supervisor
 
-** fix dirty MultiStep hack
+** fix dirty MultiStep hack, flatten sub-pipelines (unless all())
 ** fix leaking monitor() promises and gaze()
 
 ** handle RequireJS paths config somehow
