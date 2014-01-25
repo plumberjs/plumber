@@ -1,5 +1,4 @@
 * GENERAL
-** Resource: data as lazy promise (no syncReadFile!)
 ** Concat: pikaday off by one?
 ** Concat: if source abspath missing?
 ** RequireJS: record dependencies in supervisor
