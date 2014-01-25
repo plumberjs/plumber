@@ -1,6 +1,5 @@
 * GENERAL
-** Fix JavaScript sourcemaps: requirejs paths, uglify ok?
-** clean-css or cssmin or uglifycss operation, with sourcemap support
+** Resource: data as lazy promise (no syncReadFile!)
 ** Concat: pikaday off by one?
 ** Concat: if source abspath missing?
 ** RequireJS: record dependencies in supervisor
