@@ -1,6 +1,6 @@
 * GENERAL
-** Concat: pikaday off by one?
 ** Concat: if source abspath missing?
+** SourceMap helpers, remove manipulation code from operations
 ** RequireJS: record dependencies in supervisor
 
 ** fix dirty MultiStep hack, flatten sub-pipelines (unless all())
@@ -8,7 +8,10 @@
 
 ** handle RequireJS paths config somehow
 
-** for ALL operations, record any watched file, also Pipeline.js
+** supervisor: register Pipeline.js
+** supervisor: jshint - reads jshintrc? register too if so
+** supervisor: automatically register based on source map?
+
 ** exclude internal operations (finalisation) from step chain?
 ** compose pipelines by name? by reference?
 
@@ -28,22 +31,14 @@
 ** sensible defaults, incl config packs (for dev, prod)
 
 
-* LESS
-** compress? vs concat?
-
-* REQUIRE
-** split out uglification?
-
 * JSHINT
 ** cleaner output, retval
 
 * LODASH
 ** cleaner options, code
 
-* UGLIFY
-** don't rely on there being an abs path
-
 * KARMA
+* MOCHA
 * GLUE
 
 * usage:
