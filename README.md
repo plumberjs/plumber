@@ -10,6 +10,8 @@ To install plumber, use `npm` to install the `plumber-cli` module
 $ sudo npm install -g plumber-cli
 ```
 
+For an introduction, you may want to read the blog post [Abstracting away the grunt work with Plumber](http://bytes.inso.cc/2014/01/21/abstracting-away-the-grunt-work-with-plumber/).
+
 
 ## Example
 
