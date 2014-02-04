@@ -1,10 +1,8 @@
 * GENERAL
-** Concat: if source abspath missing?
-** SourceMap helpers, remove manipulation code from operations
-** RequireJS: record dependencies in supervisor
+** mercator: (apply, tests) less, requirejs
+** Source Maps: pass sourcesContent through
 
 ** fix dirty MultiStep hack, flatten sub-pipelines (unless all())
-** fix leaking monitor() promises and gaze()
 
 ** handle RequireJS paths config somehow
 
