@@ -6,6 +6,11 @@
 
 ** handle RequireJS paths config somehow
 
+** README files
+** Tests for all
+** Show Travis badge
+** LICENSE files
+
 ** supervisor: register Pipeline.js
 ** supervisor: jshint - reads jshintrc? register too if so
 ** supervisor: automatically register based on source map?
