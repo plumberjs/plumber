@@ -100,12 +100,14 @@ future.*
 ### Outputting
 
 - [write](https://github.com/theefer/plumber-write): write the result into files or directories
+- [s3](https://github.com/theefer/plumber-s3): write files to Amazon S3
 
 ### Compilation
 
 - [less](https://github.com/theefer/plumber-less): compile [LESS](http://lesscss.org/) files to CSS
 - [requirejs](https://github.com/theefer/plumber-requirejs): compile an AMD module and its dependencies together
 - [uglifyjs](https://github.com/theefer/plumber-uglifyjs): minimise JavaScript using [UglifyJS](http://lisperator.net/uglifyjs/)
+- [mincss](https://github.com/theefer/plumber-mincss): minimise CSS (using LESS)
 
 ### Transformation
 
