@@ -1,15 +1,14 @@
 * GENERAL
-** mercator: (apply, tests) less, requirejs
-** Source Maps: pass sourcesContent through
+** write: allow omitting sourcesContent or source map altogether
 
 ** fix dirty MultiStep hack, flatten sub-pipelines (unless all())
-
-** handle RequireJS paths config somehow
 
 ** README files
 ** Tests for all
 ** Show Travis badge
 ** LICENSE files
+
+** handle RequireJS paths config somehow
 
 ** supervisor: register Pipeline.js
 ** supervisor: jshint - reads jshintrc? register too if so

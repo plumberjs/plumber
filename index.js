@@ -1,3 +1,5 @@
+var pkg = require('./package');
+
 var core = require('./lib/core');
 
 var Resource = require('./lib/model/resource');
@@ -10,6 +12,7 @@ var mapEachResource = require('./lib/util/map-each-resource');
 var mapEachResourceSerially = require('./lib/util/map-each-resource-serially');
 
 module.exports = {
+    VERSION: pkg.version,
     execute: core.execute,
     run: core.run,
     Resource: Resource,
