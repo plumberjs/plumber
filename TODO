@@ -10,6 +10,8 @@
 
 ** handle RequireJS paths config somehow
 
+** write: directory only?
+
 ** supervisor: register Pipeline.js
 ** supervisor: jshint - reads jshintrc? register too if so
 ** supervisor: automatically register based on source map?
