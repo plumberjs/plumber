@@ -1,6 +1,4 @@
 * GENERAL
-** write: allow omitting sourcesContent or source map altogether
-
 ** fix dirty MultiStep hack, flatten sub-pipelines (unless all())
 
 ** README files
