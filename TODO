@@ -6,8 +6,11 @@
 ** Show Travis badge
 ** LICENSE files
 
+** Errors in operations (e.g. LESS), bubble and display
+
 ** handle RequireJS paths config somehow
 
+** glob: read out .map into res' sourcemap if referenced from source file
 ** write: directory only?
 
 ** supervisor: register Pipeline.js
