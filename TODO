@@ -1,4 +1,10 @@
 * GENERAL
+** Look for Plumbing.js recursively in parent dirs
+** bower: read .bowerrc for directory location
+** bower: use Plumbing.js directory as base dir by default
+
+** Errors in operations (e.g. LESS), bubble and display
+
 ** fix dirty MultiStep hack, flatten sub-pipelines (unless all())
 
 ** README files
@@ -6,11 +12,10 @@
 ** Show Travis badge
 ** LICENSE files
 
-** Errors in operations (e.g. LESS), bubble and display
+** cli: allow appending custom named pipelines (eg. livereload)
 
 ** handle RequireJS paths config somehow
 
-** glob: read out .map into res' sourcemap if referenced from source file
 ** write: directory only?
 
 ** supervisor: register Pipeline.js
