@@ -12,7 +12,8 @@
     "q": "~0.9.7",
     "glob": "~3.2.6",
     "flatten": "0.0.1",
-    "gaze": "~0.4.3"
+    "gaze": "~0.4.3",
+    "mercator": "~0.1.7"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
