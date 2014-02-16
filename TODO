@@ -1,9 +1,8 @@
 * GENERAL
-** Look for Plumbing.js recursively in parent dirs
-** bower: read .bowerrc for directory location
-** bower: use Plumbing.js directory as base dir by default
-
 ** Errors in operations (e.g. LESS), bubble and display
+   - reject or error report?
+
+** use Plumbing.js directory as base dir by default for bower, glob, etc
 
 ** fix dirty MultiStep hack, flatten sub-pipelines (unless all())
 
