@@ -13,7 +13,8 @@
     "glob": "~3.2.6",
     "flatten": "0.0.1",
     "gaze": "~0.4.3",
-    "mercator": "~0.1.7"
+    "mercator": "~0.1.7",
+    "highland": "~1.16.2"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
