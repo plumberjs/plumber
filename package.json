@@ -9,7 +9,6 @@
   },
   "dependencies": {
     "extend": "~1.2.1",
-    "q": "~0.9.7",
     "glob": "~3.2.6",
     "flatten": "0.0.1",
     "gaze": "~0.4.3",
