@@ -4,25 +4,26 @@ var core = require('./lib/core');
 
 var Resource = require('./lib/model/resource');
 var Report   = require('./lib/model/report');
-var steps    = require('./lib/model/step');
 
-var stringToPath    = require('./lib/util/string-to-path');
-var appendResources = require('./lib/util/append-resources');
-var mapEachResource = require('./lib/util/map-each-resource');
-var mapEachResourceSerially = require('./lib/util/map-each-resource-serially');
+var stringToPath = require('./lib/util/string-to-path');
+
+var Supervisor = require('./lib/util/supervisor');
+
+var outputReports = require('./lib/operation/output-reports');
+var warnRemainingResources = require('./lib/operation/warn-remaining-resources');
 
 module.exports = {
     VERSION: pkg.version,
-    execute: core.execute,
-    run: core.run,
+    parse:     core.parse,
+    assemble:  core.assemble,
+    operation: core.operation,
     Resource: Resource,
     Report: Report,
-    Step: steps.Step,
-    InitialStep: steps.InitialStep,
-    MultiStep: steps.MultiStep,
     // TODO: move to plumber-util package?
-    appendResources: appendResources,
-    mapEachResource: mapEachResource,
-    mapEachResourceSerially: mapEachResourceSerially,
-    stringToPath: stringToPath
+    stringToPath: stringToPath,
+    // TODO: abstract differently?
+    Supervisor: Supervisor,
+    // TODO: move to plumber-cli
+    outputReports: outputReports,
+    warnRemainingResources: warnRemainingResources
 };
