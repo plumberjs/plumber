@@ -4,8 +4,6 @@
 
 ** use Plumbing.js directory as base dir by default for bower, glob, etc
 
-** fix dirty MultiStep hack, flatten sub-pipelines (unless all())
-
 ** README files
 ** Tests for all
 ** Show Travis badge
@@ -21,12 +19,6 @@
 ** supervisor: jshint - reads jshintrc? register too if so
 ** supervisor: automatically register based on source map?
 
-** exclude internal operations (finalisation) from step chain?
-** compose pipelines by name? by reference?
-
-** pass each resource individually through steps, not as a F[L[Resource]]
-** use "Observables"? fire on find, then on changes
-
 ** first-order support for files, incl/excl, glob?
 
 ** proxy options explicitly?
@@ -34,7 +26,6 @@
 ** wrap each operation with catch to report what step caused the error
 
 ** use Harmony modules and other patterns (let, etc)?
-** add tests!
 
 ** input files can be provided to the CLI, programmatic or configured
 ** sensible defaults, incl config packs (for dev, prod)
