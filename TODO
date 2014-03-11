@@ -1,6 +1,9 @@
 * GENERAL
 ** Errors in operations (e.g. LESS), bubble and display
    - reject or error report?
+   - colour output
+
+** Make watch work with streams
 
 ** use Plumbing.js directory as base dir by default for bower, glob, etc
 
@@ -13,15 +16,13 @@
 
 ** handle RequireJS paths config somehow
 
-** write: directory only?
+** replace [] compiling with seq()?
 
 ** supervisor: register Pipeline.js
 ** supervisor: jshint - reads jshintrc? register too if so
 ** supervisor: automatically register based on source map?
 
 ** first-order support for files, incl/excl, glob?
-
-** proxy options explicitly?
 
 ** wrap each operation with catch to report what step caused the error
 
@@ -36,6 +37,12 @@
 
 * LODASH
 ** cleaner options, code
+
+* IMGMIN
+* SASS
+
+* TRACEUR
+* ES6-MODULE-LOADER
 
 * KARMA
 * MOCHA
