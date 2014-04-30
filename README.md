@@ -93,38 +93,38 @@ future.*
 
 ### Sourcing
 
-- [glob](https://github.com/theefer/plumber-glob): find files using a path or pattern
-- [bower](https://github.com/theefer/plumber-bower): find files from a [Bower](http://bower.io/) component
-- [lodash](https://github.com/theefer/plumber-lodash): generate a custom [Lo-Dash](http://lodash.com/) build
+- [glob](https://github.com/plumberjs/plumber-glob): find files using a path or pattern
+- [bower](https://github.com/plumberjs/plumber-bower): find files from a [Bower](http://bower.io/) component
+- [lodash](https://github.com/plumberjs/plumber-lodash): generate a custom [Lo-Dash](http://lodash.com/) build
 
 ### Outputting
 
-- [write](https://github.com/theefer/plumber-write): write the result into files or directories
-- [s3](https://github.com/theefer/plumber-s3): write files to Amazon S3
+- [write](https://github.com/plumberjs/plumber-write): write the result into files or directories
+- [s3](https://github.com/plumberjs/plumber-s3): write files to Amazon S3
 
 ### Compilation
 
-- [requirejs](https://github.com/theefer/plumber-requirejs): compile an AMD module and its dependencies together
-- [uglifyjs](https://github.com/theefer/plumber-uglifyjs): minimise JavaScript using [UglifyJS](http://lisperator.net/uglifyjs/)
-- [less](https://github.com/theefer/plumber-less): compile [LESS](http://lesscss.org/) files to CSS
-- [myth](https://github.com/theefer/plumber-myth): transform CSS files using the [Myth](http://www.myth.io/) preprocessor
-- [mincss](https://github.com/theefer/plumber-mincss): minimise CSS (using LESS)
-- [coffee](https://github.com/theefer/plumber-coffee): transpile CoffeeScript to JavaScript
+- [requirejs](https://github.com/plumberjs/plumber-requirejs): compile an AMD module and its dependencies together
+- [uglifyjs](https://github.com/plumberjs/plumber-uglifyjs): minimise JavaScript using [UglifyJS](http://lisperator.net/uglifyjs/)
+- [less](https://github.com/plumberjs/plumber-less): compile [LESS](http://lesscss.org/) files to CSS
+- [myth](https://github.com/plumberjs/plumber-myth): transform CSS files using the [Myth](http://www.myth.io/) preprocessor
+- [mincss](https://github.com/plumberjs/plumber-mincss): minimise CSS (using LESS)
+- [coffee](https://github.com/plumberjs/plumber-coffee): transpile CoffeeScript to JavaScript
 
 ### Transformation
 
-- [rename](https://github.com/theefer/plumber-rename): rename the filename of the input
-- [concat](https://github.com/theefer/plumber-concat): concatenate all the input together
-- [filter](https://github.com/theefer/plumber-filter): filter the input (e.g. based on file type)
-- [hash](https://github.com/theefer/plumber-hash): hash the filenames and generate a mapping
+- [rename](https://github.com/plumberjs/plumber-rename): rename the filename of the input
+- [concat](https://github.com/plumberjs/plumber-concat): concatenate all the input together
+- [filter](https://github.com/plumberjs/plumber-filter): filter the input (e.g. based on file type)
+- [hash](https://github.com/plumberjs/plumber-hash): hash the filenames and generate a mapping
 
 ### Testing
 
-- [jshint](https://github.com/theefer/plumber-jshint): run [JSHint](http://www.jshint.com/) on the input and produce a report
+- [jshint](https://github.com/plumberjs/plumber-jshint): run [JSHint](http://www.jshint.com/) on the input and produce a report
 
 ### Meta-operation
 
-- [all](https://github.com/theefer/plumber-all): pass the input into the given set of operations and return the result
+- [all](https://github.com/plumberjs/plumber-all): pass the input into the given set of operations and return the result
 
 
 
