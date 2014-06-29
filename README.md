@@ -157,7 +157,7 @@ can even be modeled as a pipeline, where the output is the result or
 report.
 
 An operation should only be concerned about doing a single thing well,
-and it is asynchronous by default using [Highland streams](http://highlandjs.org/).  Performance
+and it is asynchronous by default using [RxJS](https://github.com/Reactive-Extensions/RxJS).  Performance
 optimisation such as parallelism and caching are outside the scope of
 operations; instead, they are the sole concern of Plumber.
 
