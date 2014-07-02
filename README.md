@@ -107,6 +107,7 @@ future.*
 - [requirejs](https://github.com/theefer/plumber-requirejs): compile an AMD module and its dependencies together
 - [uglifyjs](https://github.com/theefer/plumber-uglifyjs): minimise JavaScript using [UglifyJS](http://lisperator.net/uglifyjs/)
 - [less](https://github.com/theefer/plumber-less): compile [LESS](http://lesscss.org/) files to CSS
+- [libsass](https://github.com/plumberjs/plumber-libsass): compile [Sass](http://sass-lang.com/) files to CSS
 - [mincss](https://github.com/theefer/plumber-mincss): minimise CSS (using LESS)
 - [coffee](https://github.com/theefer/plumber-coffee): transpile CoffeeScript to JavaScript
 
