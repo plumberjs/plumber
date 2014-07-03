@@ -1,6 +1,6 @@
 {
   "name": "plumber",
-  "version": "0.3.2",
+  "version": "0.4.0",
   "description": "A tool for managing web asset pipelines",
   "main": "index",
   "directories": {
@@ -13,7 +13,7 @@
     "flatten": "0.0.1",
     "gaze": "~0.4.3",
     "mercator": "~0.1.7",
-    "highland": "~1.16.2"
+    "rx": "~2.2.27"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
